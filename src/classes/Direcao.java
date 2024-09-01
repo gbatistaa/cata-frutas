@@ -1,0 +1,8 @@
+package classes;
+
+public enum Direcao {
+  CIMA,
+  BAIXO,
+  ESQUERDA,
+  DIREITA
+}
