@@ -1,6 +1,7 @@
 package classes;
+import javax.swing.*;
 
-public class Jogo {
+public class Jogo extends JFrame {
   private Jogador um, dois;
   private boolean ativo = false;
   private Configuracao config;
@@ -39,7 +40,22 @@ public class Jogo {
     ativo = false;
   }
 
-  public void render() {
-    // Renderizar
+  public void render(Floresta flo) {
+	// Define o layout do tabuleiro (grade)
+      setLayout(new GridLayout(flo.dimensao, flo.dimensao));
+
+      // Cria os quadrados do tabuleiro
+      for (int i = 0; i < flo.dimensao * flo.dimensao; i++) {
+          JPanel quadrado = new JPanel();
+          quadrado.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+          quadrado.setBackground(Color.GREEN); // Cor de fundo para representar a floresta
+          add(quadrado);
+      }
+
+      // Configurações da janela
+      setTitle("Floresta - Jogo de Tabuleiro");
+      setSize(600, 600); // Define o tamanho da janela
+      setLocationRelativeTo(null); // Centraliza a janela
+      setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Fecha a aplicação ao clicar no "X"
   }
 }
