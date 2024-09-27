@@ -1,12 +1,17 @@
 package classes;
 
 public class Floresta {
-	private int dimensao;
-	private double posicao;
-	private int nPedras;
-	private int qtdFrutasOuro;
-	private int qtdFrutasNormais;
+	public int dimensao;
+	public double posicao;
+	public int nPedras;
+	public int qtdFrutasOuro;
+	public int qtdFrutasNormais;
 	public Arvore tiposArvore[];
 	public Fruta tiposFrutas[];
+	public Floresta(int dimensao) {
+		super();
+		this.dimensao = dimensao;
+	}
+	
 
 }
