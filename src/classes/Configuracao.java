@@ -6,19 +6,19 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class Configuracao {
-    private int dimensao;
+   private int dimensao;
     private int pedras;
-    private Map<String, Integer> arvoresPorFruta;
+    private int nFrutasOuro;
     private Map<String, Integer> frutasNoChao;
-    private int bichadas;
+    private float probBichadas;
     private int capacidadeMochila;
 
-    public Configuracao(int dimensao, int pedras, Map<String, Integer> arvoresPorFruta, Map<String, Integer> frutasNoChao, int bichadas, int capacidadeMochila) {
+    public Configuracao(int dimensao, int pedras, int nFrutasOuro, Map<String, Integer> frutasNoChao, float probBichadas, int capacidadeMochila) {
         this.dimensao = dimensao;
         this.pedras = pedras;
-        this.arvoresPorFruta = arvoresPorFruta;
+        this.nFrutasOuro= nFrutasOuro;
         this.frutasNoChao = frutasNoChao;
-        this.bichadas = bichadas;
+        this.probBichadas = probBichadas;
         this.capacidadeMochila = capacidadeMochila;
     }
 
@@ -29,7 +29,7 @@ public class Configuracao {
     public int getPedras() {
         return pedras;
     }
-    
+    /*
     public int getTotalDeFrutaPorNome(Object  nomeFruta) {
         if (arvoresPorFruta.containsKey(nomeFruta)) {
             return arvoresPorFruta.get(nomeFruta);
@@ -192,5 +192,5 @@ public class Configuracao {
         sb.append("bichadas ").append(bichadas).append("\n");
         sb.append("mochila ").append(capacidadeMochila).append("\n");
         return sb.toString();
-    }
+    }*/
 }
