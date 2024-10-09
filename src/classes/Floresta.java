@@ -8,10 +8,10 @@ public class Floresta {
 	public int qtdFrutasNormais;
 	public Arvore tiposArvore[];
 	public Fruta tiposFrutas[];
+
 	public Floresta(int dimensao) {
 		super();
 		this.dimensao = dimensao;
 	}
-	
 
 }
