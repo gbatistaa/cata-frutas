@@ -1,16 +1,17 @@
+/**
+ * A classe Main é o ponto de entrada para a aplicação.
+ */
 package classes;
 
 import javax.swing.SwingUtilities;
 
 public class Main {
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		SwingUtilities.invokeLater(() -> {
-			TelaDeConfig tela = new TelaDeConfig();
-			tela.setVisible(true);
-		});
-
-	}
-
+    public static void main(String[] args) {
+        // Inicializa a interface gráfica da aplicação.
+        SwingUtilities.invokeLater(() -> {
+            TelaDeConfig tela = new TelaDeConfig();
+            tela.setVisible(true);
+        });
+    }
 }
