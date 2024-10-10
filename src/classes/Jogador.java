@@ -1,55 +1,73 @@
+/**
+ * A classe Jogador representa um jogador no jogo, que pode coletar frutas e interagir com outros jogadores.
+ */
 package classes;
 
 public class Jogador extends Entidade {
-	private Mochila mochila;
-	private int pontosVitoria = 0;
-	private int poderForca = 1;
-	private int poderDefesa = 1;
+    private Mochila mochila;
+    private int pontosVitoria = 0;
+    private int poderForca = 1;
+    private int poderDefesa = 1;
 
-	public Mochila getMochila() {
-		return mochila;
-	}
+    public Mochila getMochila() {
+        return mochila;
+    }
 
-	public void setMochila(Mochila mochila) {
-		this.mochila = mochila;
-	}
+    public void setMochila(Mochila mochila) {
+        this.mochila = mochila;
+    }
 
-	public int getPontosVitoria() {
-		return pontosVitoria;
-	}
+    public int getPontosVitoria() {
+        return pontosVitoria;
+    }
 
-	public void setPontosVitoria(int pontosVitoria) {
-		this.pontosVitoria = pontosVitoria;
-	}
+    public void setPontosVitoria(int pontosVitoria) {
+        this.pontosVitoria = pontosVitoria;
+    }
 
-	public int getPoderForca() {
-		return poderForca;
-	}
+    public int getPoderForca() {
+        return poderForca;
+    }
 
-	public void setPoderForca(int poderForca) {
-		this.poderForca = poderForca;
-	}
+    public void setPoderForca(int poderForca) {
+        this.poderForca = poderForca;
+    }
 
-	public int getPoderDefesa() {
-		return poderDefesa;
-	}
+    public int getPoderDefesa() {
+        return poderDefesa;
+    }
 
-	public void setPoderDefesa(int poderDefesa) {
-		this.poderDefesa = poderDefesa;
-	}
+    public void setPoderDefesa(int poderDefesa) {
+        this.poderDefesa = poderDefesa;
+    }
 
-	public void coletar(Fruta fruta) {
-		if (mochila.adicionarFruta(fruta)) {
-			fruta.aoColetar(this);
-		}
-		// Logica qualquer
-	}
+    /**
+     * Coleta uma fruta e a adiciona à mochila do jogador.
+     *
+     * @param fruta A fruta a ser coletada.
+     */
+    public void coletar(Fruta fruta) {
+        if (mochila.adicionarFruta(fruta)) {
+            fruta.aoColetar(this);
+        }
+        // Lógica qualquer
+    }
 
-	public void empurrar(Jogador oponente) {
-		// Logica de empurrar
-	}
+    /**
+     * Empurra outro jogador.
+     *
+     * @param oponente O jogador a ser empurrado.
+     */
+    public void empurrar(Jogador oponente) {
+        // Lógica de empurrar
+    }
 
-	public void consumirFruta(Fruta fruta) {
-		// Logica de consumir fruta
-	}
+    /**
+     * Consome uma fruta.
+     *
+     * @param fruta A fruta a ser consumida.
+     */
+    public void consumirFruta(Fruta fruta) {
+        // Lógica de consumir fruta
+    }
 }
