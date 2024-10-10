@@ -1,4 +1,4 @@
-package classes;
+package jogo;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -21,7 +21,7 @@ import javax.swing.SwingUtilities;
  */
 public class TelaDeConfig extends JFrame {
     private JTextField dimensaoField, pedrasField, probBichadasField, capacidadeMochilaField;
-    private JTextField numeroFrutasOuroField, frutasNoChaoField;
+    private JTextField numeroFrutasOuroField, frutasNoChaoField , numeroDasArvoresField;
     private JButton startButton;
 
     /**
@@ -31,10 +31,10 @@ public class TelaDeConfig extends JFrame {
     public TelaDeConfig() {
         // Configurações básicas da janela
         setTitle("Configuração do Jogo Cata-Frutas");
-        setSize(500, 500);
+        setSize(600, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setLayout(new GridLayout(8, 2, 10, 10));
+        setLayout(new GridLayout(0, 2, 10, 10));
         getContentPane().setBackground(Color.LIGHT_GRAY);
 
         // Campos de entrada de dados
@@ -47,8 +47,13 @@ public class TelaDeConfig extends JFrame {
         JLabel numeroFrutasOuroLabel = new JLabel("Quantidade de frutas ouro:");
         numeroFrutasOuroField = new JTextField();
 
-        JLabel frutasNoChaoLabel = new JLabel("Frutas normais no chão:");
+        JLabel frutasNoChaoLabel = new JLabel("Escolha o número das frutas no chão:");
         frutasNoChaoField = new JTextField();
+        JLabel instrucoesArLabel = new JLabel("Exemplo: coco:3,abacate:2,goiaba:1,acerola:2,...");
+
+        JLabel numeroDasArvoresLabel = new JLabel("Escolha o número de cada árvore");
+        numeroDasArvoresField = new JTextField();
+        JLabel instrucoesAr2Label = new JLabel("Exemplo: coco:1,abacate:1,goiaba:1,acerola:2,... ");
 
         JLabel probBichadasLabel = new JLabel("Probabilidade de uma fruta estar bichada:");
         probBichadasField = new JTextField();
@@ -57,12 +62,12 @@ public class TelaDeConfig extends JFrame {
         capacidadeMochilaField = new JTextField();
 
         // Array de JTextFields
-        JTextField[] textFields = { dimensaoField, pedrasField, numeroFrutasOuroField, frutasNoChaoField,
+        JTextField[] textFields = { dimensaoField, pedrasField,numeroDasArvoresField, numeroFrutasOuroField, frutasNoChaoField,
                 probBichadasField, capacidadeMochilaField };
 
         // Define o tamanho preferido para todos os JTextFields
         for (JTextField textField : textFields) {
-            textField.setPreferredSize(new Dimension(100, 30));
+            textField.setPreferredSize(new Dimension(70, 30));
         }
 
         // Botão para iniciar o jogo
@@ -80,6 +85,13 @@ public class TelaDeConfig extends JFrame {
 
         add(frutasNoChaoLabel);
         add(frutasNoChaoField);
+        add(instrucoesArLabel);
+        add(new JLabel()); // Espaço vazio
+
+        add(numeroDasArvoresLabel);
+        add(numeroDasArvoresField);
+        add(instrucoesAr2Label);
+        add(new JLabel()); // Espaço vazio
 
         add(probBichadasLabel);
         add(probBichadasField);
@@ -102,17 +114,18 @@ public class TelaDeConfig extends JFrame {
 
                 // Processa os campos de Map (árvores por fruta e frutas no chão)
                 int nFrutasOuro = Integer.parseInt(numeroFrutasOuroField.getText());
-                Map<String, Integer> frutasNormaisNoChao = parseInputToMap(frutasNoChaoField.getText());
+                Map<String, Integer> frutasNoChao = parseInputToMap(frutasNoChaoField.getText());
+                Map<String, Integer> numeroDasArvores = parseInputToMap(frutasNoChaoField.getText());
 
                 // Cria a configuração do jogo
                 if (nFrutasOuro > 0) {
-                    Configuracao config = new Configuracao(dimensao, pedras, nFrutasOuro, frutasNormaisNoChao,
-                            pBichadas, capacidadeMochila);
+                    Configuracao config = new Configuracao( dimensao,  pedras,  nFrutasOuro,  numeroDasArvores,
+                			 frutasNoChao,  pBichadas,  capacidadeMochila);
                     // Usando o objeto config para carregar a próxima tela do jogo
                     System.out.println("Configuração criada: " + config);
 
                     SwingUtilities.invokeLater(() -> {
-                        JFrame frame = new JFrame("Jogo da Floresta");
+                        JFrame frame = new JFrame("Cata-frutas");
                         Jogo jogo = new Jogo(); // Instancia o jogo com o objeto floresta.
 
                         frame.add(jogo); // Adiciona o painel Jogo ao JFrame
