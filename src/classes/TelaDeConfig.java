@@ -14,11 +14,20 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
+/**
+ * Classe que representa a tela de configuração do jogo "Cata-Frutas".
+ * Permite ao usuário definir as configurações iniciais do jogo, como dimensões do tabuleiro,
+ * quantidade de pedras, frutas e outras configurações.
+ */
 public class TelaDeConfig extends JFrame {
     private JTextField dimensaoField, pedrasField, probBichadasField, capacidadeMochilaField;
     private JTextField numeroFrutasOuroField, frutasNoChaoField;
     private JButton startButton;
 
+    /**
+     * Construtor da classe TelaDeConfig.
+     * Inicializa a interface gráfica e os componentes necessários.
+     */
     public TelaDeConfig() {
         // Configurações básicas da janela
         setTitle("Configuração do Jogo Cata-Frutas");
@@ -40,7 +49,6 @@ public class TelaDeConfig extends JFrame {
 
         JLabel frutasNoChaoLabel = new JLabel("Frutas normais no chão:");
         frutasNoChaoField = new JTextField();
-        // Parte em que o jogador vai escolher os tipos de árvores e qtd de cada tipo
 
         JLabel probBichadasLabel = new JLabel("Probabilidade de uma fruta estar bichada:");
         probBichadasField = new JTextField();
@@ -92,7 +100,7 @@ public class TelaDeConfig extends JFrame {
                 float pBichadas = Float.parseFloat(probBichadasField.getText());
                 int capacidadeMochila = Integer.parseInt(capacidadeMochilaField.getText());
 
-                // Processa os campos de Map (ávores por fruta e frutas no chão)
+                // Processa os campos de Map (árvores por fruta e frutas no chão)
                 int nFrutasOuro = Integer.parseInt(numeroFrutasOuroField.getText());
                 Map<String, Integer> frutasNormaisNoChao = parseInputToMap(frutasNoChaoField.getText());
 
@@ -121,8 +129,12 @@ public class TelaDeConfig extends JFrame {
         });
     }
 
-    // Função para converter o input de string no formato fruta:quantidade para um
-    // Map
+    /**
+     * Converte o input de string no formato fruta:quantidade para um Map.
+     * 
+     * @param input A string de entrada contendo pares no formato fruta:quantidade.
+     * @return Um mapa contendo frutas e suas respectivas quantidades.
+     */
     private Map<String, Integer> parseInputToMap(String input) {
         Map<String, Integer> map = new HashMap<>();
         String[] pairs = input.split(","); // Cada par fruta:quantidade separado por vírgula
