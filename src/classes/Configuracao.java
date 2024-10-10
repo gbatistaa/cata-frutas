@@ -1,7 +1,7 @@
 /**
  * A classe Configuracao é responsável por gerenciar as configurações do jogo, incluindo dimensões, frutas e bichadas.
  */
-package classes;
+package jogo;
 
 import java.io.*;
 import java.util.HashMap;
@@ -19,7 +19,7 @@ public class Configuracao {
     private Map<String, Integer> frutasNoChao;
     private float probBichadas;
     private int capacidadeMochila;
-    private int bichadas;
+    
 
     /**
      * Construtor da configuração do jogo.
@@ -31,14 +31,17 @@ public class Configuracao {
      * @param bichadas O número de bichadas no jogo.
      * @param capacidadeMochila A capacidade da mochila do jogador.
      */
-    public Configuracao(int dimensao, int pedras, Map<String, Integer> arvoresPorFruta, Map<String, Integer> frutasNoChao, int bichadas, int capacidadeMochila) {
-        this.dimensao = dimensao;
-        this.pedras = pedras;
-        this.arvoresPorFruta = arvoresPorFruta;
-        this.frutasNoChao = frutasNoChao;
-        this.bichadas = bichadas;
-        this.capacidadeMochila = capacidadeMochila;
-    }
+    public Configuracao(int dimensao, int pedras, int nFrutasOuro, Map<String, Integer> arvoresPorFruta,
+			Map<String, Integer> frutasNoChao, float probBichadas, int capacidadeMochila) {
+		super();
+		this.dimensao = dimensao;
+		this.pedras = pedras;
+		this.nFrutasOuro = nFrutasOuro;
+		this.arvoresPorFruta = arvoresPorFruta;
+		this.frutasNoChao = frutasNoChao;
+		this.probBichadas = probBichadas;
+		this.capacidadeMochila = capacidadeMochila;
+	}
 
     /**
      * Retorna a dimensão do campo de jogo.
@@ -49,7 +52,9 @@ public class Configuracao {
         return dimensao;
     }
 
-    /**
+   
+
+	/**
      * Retorna o número de pedras no jogo.
      *
      * @return O número de pedras.
@@ -139,8 +144,8 @@ public class Configuracao {
      *
      * @return O número de bichadas.
      */
-    public int getBichadas() {
-        return bichadas;
+    public float getProbBichadas() {
+        return probBichadas;
     }
 
     /**
@@ -159,6 +164,7 @@ public class Configuracao {
      * @return Um objeto Configuracao com os dados lidos.
      * @throws IllegalArgumentException Se a configuração estiver em um formato inválido.
      */
+    /*
     public static Configuracao lerConfiguracaoPorString(String configString) throws IllegalArgumentException {
         Scanner scanner = new Scanner(configString);
         int dimensao = 0;
@@ -207,7 +213,7 @@ public class Configuracao {
         }
         scanner.close();
         return new Configuracao(dimensao, pedras, arvoresPorFruta, frutasNoChao, bichadas, capacidadeMochila);
-    }
+    }*/
 
     /**
      * Lê a configuração do jogo a partir de um arquivo.
@@ -217,6 +223,7 @@ public class Configuracao {
      * @throws IOException Se ocorrer um erro ao ler o arquivo.
      * @throws IllegalArgumentException Se a configuração estiver em um formato inválido.
      */
+    /*
     public static Configuracao lerConfiguracao(String caminhoArquivo) throws IOException, IllegalArgumentException {
         BufferedReader reader = new BufferedReader(new FileReader(caminhoArquivo));
         String linha;
@@ -265,7 +272,7 @@ public class Configuracao {
         }
         reader.close();
         return new Configuracao(dimensao, pedras, arvoresPorFruta, frutasNoChao, bichadas, capacidadeMochila);
-    }
+    }*/
 
     /**
      * Retorna uma representação em string da configuração do jogo.
@@ -280,7 +287,7 @@ public class Configuracao {
         for (String fruta : arvoresPorFruta.keySet()) {
             sb.append(fruta).append(" ").append(arvoresPorFruta.get(fruta)).append(" ").append(frutasNoChao.get(fruta)).append("\n");
         }
-        sb.append("bichadas ").append(bichadas).append("\n");
+        //sb.append("bichadas ").append(bichadas).append("\n");
         sb.append("mochila ").append(capacidadeMochila).append("\n");
         return sb.toString();
     }
