@@ -231,6 +231,10 @@ public class Configuracao {
         int capacidadeMochila = 0;
 
         while ((linha = reader.readLine()) != null) {
+            // Ignorar linhas vazias
+            if (linha.trim().isEmpty()) {
+                continue;
+            }
             String[] partes = linha.split(" ");
             switch (partes[0]) {
                 case "dimensao":

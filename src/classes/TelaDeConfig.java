@@ -16,7 +16,7 @@ public class TelaDeConfig extends JFrame {
     private JTextField dimensaoField, pedrasField, probBichadasField, capacidadeMochilaField;
     private JTextField maracujaField, laranjaField, abacateField, cocoField, acerolaField, amoraField, goiabaField; // Campos para frutas
     private JTextField arvoresMaracujaField, arvoresLaranjaField, arvoresAbacateField, arvoresCocoField, arvoresAcerolaField, arvoresAmoraField, arvoresGoiabaField; // Campos para árvores por fruta
-    private JButton startButton, importButton;
+    private JButton startButton, importButton, exportButton;
 
     public TelaDeConfig() {
         setTitle("Configuração do Jogo Cata-Frutas");
@@ -68,6 +68,8 @@ public class TelaDeConfig extends JFrame {
         startButton = new JButton("Iniciar Jogo");
 
         importButton = new JButton("Importar Configuração");
+
+        exportButton = new JButton("Exportar configuração");
 
 
 
@@ -121,11 +123,12 @@ public class TelaDeConfig extends JFrame {
         add(capacidadeMochilaLabel);
         add(capacidadeMochilaField);
 
+        add(exportButton);
+        add(importButton);
+
         add(new JLabel()); // Espaço vazio
         add(startButton);
 
-        add(new JLabel()); // Espaço vazio
-        add(importButton);
 
 
         // Ação do botão de iniciar jogo
@@ -184,6 +187,63 @@ public class TelaDeConfig extends JFrame {
                 }
             }
         });
+        exportButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Cria um JFileChooser para selecionar o local do arquivo
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setDialogTitle("Salvar Configuração");
+
+                // Exibe o diálogo e verifica se o usuário selecionou um arquivo
+                int userSelection = fileChooser.showSaveDialog(TelaDeConfig.this);
+                if (userSelection == JFileChooser.APPROVE_OPTION) {
+                    File fileToSave = fileChooser.getSelectedFile();
+                    // Adiciona a extensão .txt se o usuário não a especificou
+                    if (!fileToSave.getName().endsWith(".txt")) {
+                        fileToSave = new File(fileToSave.getAbsolutePath() + ".txt");
+                    }
+
+                    // Pega os dados do formulário
+                    int dimensao = Integer.parseInt(dimensaoField.getText());
+                    int pedras = Integer.parseInt(pedrasField.getText());
+                    float pBichadas = Float.parseFloat(probBichadasField.getText());
+                    int capacidadeMochila = Integer.parseInt(capacidadeMochilaField.getText());
+
+                    // Cria os mapas para frutas no chão e árvores por fruta
+                    Map<String, Integer> frutasNoChao = new HashMap<>();
+                    frutasNoChao.put("maracuja", Integer.parseInt(maracujaField.getText()));
+                    frutasNoChao.put("laranja", Integer.parseInt(laranjaField.getText()));
+                    frutasNoChao.put("abacate", Integer.parseInt(abacateField.getText()));
+                    frutasNoChao.put("coco", Integer.parseInt(cocoField.getText()));
+                    frutasNoChao.put("acerola", Integer.parseInt(acerolaField.getText()));
+                    frutasNoChao.put("amora", Integer.parseInt(amoraField.getText()));
+                    frutasNoChao.put("goiaba", Integer.parseInt(goiabaField.getText()));
+
+                    Map<String, Integer> arvoresPorFruta = new HashMap<>();
+                    arvoresPorFruta.put("maracuja", Integer.parseInt(arvoresMaracujaField.getText()));
+                    arvoresPorFruta.put("laranja", Integer.parseInt(arvoresLaranjaField.getText()));
+                    arvoresPorFruta.put("abacate", Integer.parseInt(arvoresAbacateField.getText()));
+                    arvoresPorFruta.put("coco", Integer.parseInt(arvoresCocoField.getText()));
+                    arvoresPorFruta.put("acerola", Integer.parseInt(arvoresAcerolaField.getText()));
+                    arvoresPorFruta.put("amora", Integer.parseInt(amoraField.getText()));
+                    arvoresPorFruta.put("goiaba", Integer.parseInt(arvoresGoiabaField.getText()));
+
+                    // Cria a configuração do jogo
+                    Configuracao config = new Configuracao(dimensao, pedras, arvoresPorFruta, frutasNoChao, pBichadas, capacidadeMochila);
+                    String configString = config.toString(); // Converte a configuração para string
+
+                    // Tenta salvar a configuração no arquivo
+                    try (java.io.PrintWriter writer = new java.io.PrintWriter(fileToSave)) {
+                        writer.println(configString);
+                        JOptionPane.showMessageDialog(TelaDeConfig.this, "Configuração exportada com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                    } catch (IOException ex) {
+                        JOptionPane.showMessageDialog(TelaDeConfig.this, "Erro ao salvar a configuração: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+        });
+
+
     }
 
     private void inicializarJogo(Configuracao config) {
