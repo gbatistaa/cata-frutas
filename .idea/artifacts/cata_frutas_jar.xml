@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="cata-frutas:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/cata_frutas_jar</output-path>
+    <root id="archive" name="cata-frutas.jar">
+      <element id="module-output" name="cata-frutas" />
+    </root>
+  </artifact>
+</component>
