@@ -31,4 +31,19 @@ public abstract class Fruta extends Entidade {
     public void aoColetar(Jogador coletor) {
         // Lógica ao coletar fruta
     }
+
+    public static Fruta PorNome(String nome) {
+        switch(nome.toLowerCase()) {
+            case "abacate": return new Abacate();
+            case "acerola": return new Acerola();
+            case "amora": return new Amora();
+            case "coco": return new Coco();
+            case "goiaba": return new Goiaba();
+            case "laranja": return new Laranja();
+            case "maracuja": return new Maracuja();
+            default:
+                System.err.println("Fruta invalida: " + nome);
+                return null;
+        }
+    }
 }

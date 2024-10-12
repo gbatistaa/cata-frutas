@@ -27,7 +27,7 @@ public class Configuracao {
      * @param pedras O número de pedras no jogo.
      * @param arvoresPorFruta Mapa contendo o número de árvores por tipo de fruta.
      * @param frutasNoChao Mapa contendo o número de frutas no chão por tipo.
-     * @param bichadas O número de bichadas no jogo.
+     * @param probBichadas A probabilidade de uma fruta ser bichada de 0 a 1.
      * @param capacidadeMochila A capacidade da mochila do jogador.
      */
     public Configuracao(int dimensao, int pedras, Map<String, Integer> arvoresPorFruta, Map<String, Integer> frutasNoChao, float probBichadas, int capacidadeMochila) {

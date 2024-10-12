@@ -1,5 +1,5 @@
 package classes;
 
-public class Maracuja {
+public class Maracuja extends Fruta {
 
 }

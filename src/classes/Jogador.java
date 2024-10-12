@@ -3,11 +3,20 @@
  */
 package classes;
 
+import java.awt.*;
+
 public class Jogador extends Entidade {
     private Mochila mochila;
+    private Color color;
     private int pontosVitoria = 0;
     private int poderForca = 1;
     private int poderDefesa = 1;
+
+    public Jogador(int x, int y, Color color) {
+        setX(x);
+        setY(y);
+        this.color = color;
+    }
 
     public Mochila getMochila() {
         return mochila;

@@ -3,8 +3,7 @@
  */
 package classes;
 
-import java.awt.Color;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import javax.swing.BorderFactory;
@@ -111,6 +110,6 @@ public class Jogo extends JPanel {
             add(quadrado);
         }
 
-        setLocation(null); // Centraliza a janela
+        setLocation(new Point(0, 0)); // Centraliza a janela
     }
 }

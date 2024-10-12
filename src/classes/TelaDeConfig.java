@@ -14,22 +14,13 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-/**
- * Classe que representa a tela de configuração do jogo "Cata-Frutas".
- * Permite ao usuário definir as configurações iniciais do jogo, como dimensões do tabuleiro,
- * quantidade de pedras, frutas e outras configurações.
- */
 public class TelaDeConfig extends JFrame {
     private JTextField dimensaoField, pedrasField, probBichadasField, capacidadeMochilaField;
-    private JTextField numeroFrutasOuroField, frutasNoChaoField , arvoresPorFrutaField;
+    private JTextField maracujaField, laranjaField, abacateField, cocoField, acerolaField, amoraField, goiabaField; // Campos para frutas
+    private JTextField arvoresMaracujaField, arvoresLaranjaField, arvoresAbacateField, arvoresCocoField, arvoresAcerolaField, arvoresAmoraField, arvoresGoiabaField; // Campos para árvores por fruta
     private JButton startButton;
 
-    /**
-     * Construtor da classe TelaDeConfig.
-     * Inicializa a interface gráfica e os componentes necessários.
-     */
     public TelaDeConfig() {
-        // Configurações básicas da janela
         setTitle("Configuração do Jogo Cata-Frutas");
         setSize(600, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -42,15 +33,25 @@ public class TelaDeConfig extends JFrame {
         dimensaoField = new JTextField();
 
         JLabel pedrasLabel = new JLabel("Quantidade de pedras:");
-        pedrasField = new JTextField();        
+        pedrasField = new JTextField();
 
-        JLabel frutasNoChaoLabel = new JLabel("Escolha o número das frutas no chão:");
-        frutasNoChaoField = new JTextField();
-        JLabel instrucoesArLabel = new JLabel("Exemplo: maracuja:2,abacate:2,goiaba:1,acerola:2,...");
+        JLabel frutasNoChaoLabel = new JLabel("Frutas no chão (quantidade):");
+        maracujaField = new JTextField();
+        laranjaField = new JTextField();
+        abacateField = new JTextField();
+        cocoField = new JTextField();
+        acerolaField = new JTextField();
+        amoraField = new JTextField();
+        goiabaField = new JTextField();
 
-        JLabel arvoresPorFrutaLabel = new JLabel("Escolha o número de cada árvore");
-        arvoresPorFrutaField = new JTextField();
-        JLabel instrucoesAr2Label = new JLabel("Exemplo: coco:1,abacate:1,goiaba:1,acerola:2,... ");
+        JLabel arvoresPorFrutaLabel = new JLabel("Árvores por fruta (quantidade):");
+        arvoresMaracujaField = new JTextField();
+        arvoresLaranjaField = new JTextField();
+        arvoresAbacateField = new JTextField();
+        arvoresCocoField = new JTextField();
+        arvoresAcerolaField = new JTextField();
+        arvoresAmoraField = new JTextField();
+        arvoresGoiabaField = new JTextField();
 
         JLabel probBichadasLabel = new JLabel("Probabilidade de uma fruta estar bichada:");
         probBichadasField = new JTextField();
@@ -58,11 +59,9 @@ public class TelaDeConfig extends JFrame {
         JLabel capacidadeMochilaLabel = new JLabel("Capacidade da mochila:");
         capacidadeMochilaField = new JTextField();
 
-        // Array de JTextFields
-        JTextField[] textFields = { dimensaoField, pedrasField,arvoresPorFrutaField, frutasNoChaoField,
-                probBichadasField, capacidadeMochilaField };
+        // Array de JTextFields para garantir tamanho consistente
+        JTextField[] textFields = { dimensaoField, pedrasField, maracujaField, laranjaField, abacateField, cocoField, acerolaField, amoraField, goiabaField, arvoresMaracujaField, arvoresLaranjaField, arvoresAbacateField, arvoresCocoField, arvoresAcerolaField, arvoresAmoraField, arvoresGoiabaField, probBichadasField, capacidadeMochilaField };
 
-        // Define o tamanho preferido para todos os JTextFields
         for (JTextField textField : textFields) {
             textField.setPreferredSize(new Dimension(80, 30));
         }
@@ -75,18 +74,45 @@ public class TelaDeConfig extends JFrame {
         add(dimensaoField);
 
         add(pedrasLabel);
-        add(pedrasField);       
+        add(pedrasField);
 
+        // Frutas no chão
         add(frutasNoChaoLabel);
-        add(frutasNoChaoField);
-        add(instrucoesArLabel);
         add(new JLabel()); // Espaço vazio
+        add(new JLabel("Maracujá:"));
+        add(maracujaField);
+        add(new JLabel("Laranja:"));
+        add(laranjaField);
+        add(new JLabel("Abacate:"));
+        add(abacateField);
+        add(new JLabel("Coco:"));
+        add(cocoField);
+        add(new JLabel("Acerola:"));
+        add(acerolaField);
+        add(new JLabel("Amora:"));
+        add(amoraField);
+        add(new JLabel("Goiaba:"));
+        add(goiabaField);
 
+        // Árvores por fruta
         add(arvoresPorFrutaLabel);
-        add(arvoresPorFrutaField);
-        add(instrucoesAr2Label);
         add(new JLabel()); // Espaço vazio
+        add(new JLabel("Maracujá:"));
+        add(arvoresMaracujaField);
+        add(new JLabel("Laranja:"));
+        add(arvoresLaranjaField);
+        add(new JLabel("Abacate:"));
+        add(arvoresAbacateField);
+        add(new JLabel("Coco:"));
+        add(arvoresCocoField);
+        add(new JLabel("Acerola:"));
+        add(arvoresAcerolaField);
+        add(new JLabel("Amora:"));
+        add(arvoresAmoraField);
+        add(new JLabel("Goiaba:"));
+        add(arvoresGoiabaField);
 
+        // Outros campos
         add(probBichadasLabel);
         add(probBichadasField);
 
@@ -106,51 +132,43 @@ public class TelaDeConfig extends JFrame {
                 float pBichadas = Float.parseFloat(probBichadasField.getText());
                 int capacidadeMochila = Integer.parseInt(capacidadeMochilaField.getText());
 
-                // Processa os campos de Map (árvores por fruta e frutas no chão)
-                Map<String, Integer> frutasNoChao = parseInputToMap(frutasNoChaoField.getText());
-                Map<String, Integer> arvoresPorFruta = parseInputToMap(frutasNoChaoField.getText());
+                // Cria os mapas para frutas no chão e árvores por fruta
+                Map<String, Integer> frutasNoChao = new HashMap<>();
+                frutasNoChao.put("maracuja", Integer.parseInt(maracujaField.getText()));
+                frutasNoChao.put("laranja", Integer.parseInt(laranjaField.getText()));
+                frutasNoChao.put("abacate", Integer.parseInt(abacateField.getText()));
+                frutasNoChao.put("coco", Integer.parseInt(cocoField.getText()));
+                frutasNoChao.put("acerola", Integer.parseInt(acerolaField.getText()));
+                frutasNoChao.put("amora", Integer.parseInt(amoraField.getText()));
+                frutasNoChao.put("goiaba", Integer.parseInt(goiabaField.getText()));
+
+                Map<String, Integer> arvoresPorFruta = new HashMap<>();
+                arvoresPorFruta.put("maracuja", Integer.parseInt(arvoresMaracujaField.getText()));
+                arvoresPorFruta.put("laranja", Integer.parseInt(arvoresLaranjaField.getText()));
+                arvoresPorFruta.put("abacate", Integer.parseInt(arvoresAbacateField.getText()));
+                arvoresPorFruta.put("coco", Integer.parseInt(arvoresCocoField.getText()));
+                arvoresPorFruta.put("acerola", Integer.parseInt(arvoresAcerolaField.getText()));
+                arvoresPorFruta.put("amora", Integer.parseInt(arvoresAmoraField.getText()));
+                arvoresPorFruta.put("goiaba", Integer.parseInt(arvoresGoiabaField.getText()));
 
                 // Cria a configuração do jogo
-                 
-                    Configuracao config = new Configuracao( dimensao,  pedras,  arvoresPorFruta,
-                			 frutasNoChao,  pBichadas,  capacidadeMochila);
-                    // Usando o objeto config para carregar a próxima tela do jogo
-                    System.out.println("Configuração criada: " + config);
+                Configuracao config = new Configuracao(dimensao, pedras, arvoresPorFruta, frutasNoChao, pBichadas, capacidadeMochila);
+                System.out.println("Configuração criada: " + config);
 
-                    SwingUtilities.invokeLater(() -> {
-                        JFrame frame = new JFrame("Cata-frutas");
-                        Jogo jogo = new Jogo(); // Instancia o jogo com o objeto floresta.
-
-                        frame.add(jogo); // Adiciona o painel Jogo ao JFrame
-                        frame.setSize(600, 600); // Define o tamanho da janela
-                        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-                        frame.setResizable(false); // Opcional: impede o redimensionamento da janela
-                        frame.setVisible(true); // Torna a janela visível
-                        jogo.render(config);
-                    });
-                }
-
-            
+                SwingUtilities.invokeLater(() -> {
+                    JFrame frame = new JFrame("Cata-frutas");
+                    Jogo jogo = new Jogo();
+                    Floresta f = new Floresta();
+                    f.gerar(config);
+                    System.out.println("Floresta criada: \n" + f);
+                    frame.add(jogo);
+                    frame.setSize(600, 600);
+                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    frame.setResizable(false);
+                    frame.setVisible(true);
+                    jogo.render(config);
+                });
+            }
         });
     }
-
-    /**
-     * Converte o input de string no formato fruta:quantidade para um Map.
-     * 
-     * @param input A string de entrada contendo pares no formato fruta:quantidade.
-     * @return Um mapa contendo frutas e suas respectivas quantidades.
-     */
-    private Map<String, Integer> parseInputToMap(String input) {
-        Map<String, Integer> map = new HashMap<>();
-        String[] pairs = input.split(","); // Cada par fruta:quantidade separado por vírgula
-        for (String pair : pairs) {
-            String[] keyValue = pair.split(":");
-            if (keyValue.length == 2) {
-                map.put(keyValue[0].trim(), Integer.parseInt(keyValue[1].trim()));
-            }
-        }
-        return map;
-    }
-
 }
