@@ -15,7 +15,7 @@ import javax.swing.*;
 public class TelaDeConfig extends JFrame {
     private JTextField dimensaoField, pedrasField, probBichadasField, capacidadeMochilaField;
     private JTextField maracujaField, laranjaField, abacateField, cocoField, acerolaField, amoraField, goiabaField; // Campos para frutas
-    private JTextField arvoresMaracujaField, arvoresLaranjaField, arvoresAbacateField, arvoresCocoField, arvoresAcerolaField, arvoresAmoraField, arvoresGoiabaField; // Campos para árvores por fruta
+    private JTextField  arvoresLaranjaField, arvoresAbacateField, arvoresCocoField, arvoresAcerolaField, arvoresAmoraField, arvoresGoiabaField; // Campos para árvores por fruta
     private JButton startButton, importButton, exportButton;
 
     public TelaDeConfig() {
@@ -43,7 +43,6 @@ public class TelaDeConfig extends JFrame {
         goiabaField = new JTextField();
 
         JLabel arvoresPorFrutaLabel = new JLabel("Árvores por fruta (quantidade):");
-        arvoresMaracujaField = new JTextField();
         arvoresLaranjaField = new JTextField();
         arvoresAbacateField = new JTextField();
         arvoresCocoField = new JTextField();
@@ -58,7 +57,7 @@ public class TelaDeConfig extends JFrame {
         capacidadeMochilaField = new JTextField();
 
         // Array de JTextFields para garantir tamanho consistente
-        JTextField[] textFields = { dimensaoField, pedrasField, maracujaField, laranjaField, abacateField, cocoField, acerolaField, amoraField, goiabaField, arvoresMaracujaField, arvoresLaranjaField, arvoresAbacateField, arvoresCocoField, arvoresAcerolaField, arvoresAmoraField, arvoresGoiabaField, probBichadasField, capacidadeMochilaField };
+        JTextField[] textFields = { dimensaoField, pedrasField, maracujaField, laranjaField, abacateField, cocoField, acerolaField, amoraField, goiabaField,  arvoresLaranjaField, arvoresAbacateField, arvoresCocoField, arvoresAcerolaField, arvoresAmoraField, arvoresGoiabaField, probBichadasField, capacidadeMochilaField };
 
         for (JTextField textField : textFields) {
             textField.setPreferredSize(new Dimension(80, 30));
@@ -101,8 +100,6 @@ public class TelaDeConfig extends JFrame {
         // Árvores por fruta
         add(arvoresPorFrutaLabel);
         add(new JLabel()); // Espaço vazio
-        add(new JLabel("Maracujá:"));
-        add(arvoresMaracujaField);
         add(new JLabel("Laranja:"));
         add(arvoresLaranjaField);
         add(new JLabel("Abacate:"));
@@ -152,7 +149,6 @@ public class TelaDeConfig extends JFrame {
                 frutasNoChao.put("goiaba", Integer.parseInt(goiabaField.getText()));
 
                 Map<String, Integer> arvoresPorFruta = new HashMap<>();
-                arvoresPorFruta.put("maracuja", Integer.parseInt(arvoresMaracujaField.getText()));
                 arvoresPorFruta.put("laranja", Integer.parseInt(arvoresLaranjaField.getText()));
                 arvoresPorFruta.put("abacate", Integer.parseInt(arvoresAbacateField.getText()));
                 arvoresPorFruta.put("coco", Integer.parseInt(arvoresCocoField.getText()));
@@ -220,7 +216,6 @@ public class TelaDeConfig extends JFrame {
                     frutasNoChao.put("goiaba", Integer.parseInt(goiabaField.getText()));
 
                     Map<String, Integer> arvoresPorFruta = new HashMap<>();
-                    arvoresPorFruta.put("maracuja", Integer.parseInt(arvoresMaracujaField.getText()));
                     arvoresPorFruta.put("laranja", Integer.parseInt(arvoresLaranjaField.getText()));
                     arvoresPorFruta.put("abacate", Integer.parseInt(arvoresAbacateField.getText()));
                     arvoresPorFruta.put("coco", Integer.parseInt(arvoresCocoField.getText()));
