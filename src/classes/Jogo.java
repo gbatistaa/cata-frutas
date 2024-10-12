@@ -6,6 +6,8 @@ package classes;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
+import java.net.URL;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
@@ -143,7 +145,10 @@ public class Jogo extends JPanel {
 
     // Método auxiliar para carregar a imagem
     private Image carregarImagem(String caminho) {
-        return Toolkit.getDefaultToolkit().getImage(caminho);
+        String caminhoAbsoluto = new File(caminho).getAbsolutePath();
+        return Toolkit.getDefaultToolkit().getImage(caminhoAbsoluto);
     }
+
+
 
 }
