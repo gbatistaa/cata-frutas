@@ -162,7 +162,7 @@ public class TelaDeConfig extends JFrame {
                 System.out.println("Configuração criada: " + config);
 
                 SwingUtilities.invokeLater(() -> {
-
+                    inicializarJogo(config);
                 });
             }
         });
@@ -188,8 +188,8 @@ public class TelaDeConfig extends JFrame {
 
     private void inicializarJogo(Configuracao config) {
         JFrame frame = new JFrame("Cata-frutas");
-        Jogo jogo = new Jogo();
         Floresta f = new Floresta();
+        Jogo jogo = new Jogo(f);
         f.gerar(config);
         System.out.println("Floresta criada: \n" + f);
         frame.add(jogo);

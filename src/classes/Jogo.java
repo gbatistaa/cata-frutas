@@ -18,10 +18,10 @@ public class Jogo extends JPanel {
     /**
      * Construtor do jogo.
      */
-    public Jogo() {
+    public Jogo(Floresta floresta) {
         um = new Jogador(0, 0, Color.RED); // Inicializa jogador1 na posição (0, 0)
         dois = new Jogador(5, 5, Color.BLUE); // Inicializa jogador2 na posição (5, 5)
-
+        this.flo = floresta;
         // Configura o foco para o painel
         setFocusable(true);
 
@@ -103,13 +103,47 @@ public class Jogo extends JPanel {
         setLayout(new GridLayout(config.getDimensao(), config.getDimensao()));
 
         // Cria os quadrados do tabuleiro
-        for (int i = 0; i < config.getDimensao() * config.getDimensao(); i++) {
-            JPanel quadrado = new JPanel();
-            quadrado.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-            quadrado.setBackground(Color.GREEN); // Cor de fundo para representar a floresta
-            add(quadrado);
+        for (int i = 0; i < config.getDimensao(); i++) {
+            for (int j = 0; j < config.getDimensao(); j++) {
+                int finalI = i;
+                int finalJ = j;
+                JPanel quadrado = new JPanel() {
+                    @Override
+                    protected void paintComponent(Graphics g) {
+                        super.paintComponent(g);
+                        Image imagem = getImageParaEntidade(finalI, finalJ); // Obtém a imagem da entidade
+                        if (imagem != null) {
+                            g.drawImage(imagem, 0, 0, getWidth(), getHeight(), this); // Desenha a imagem no painel
+                        }
+                    }
+                };
+                quadrado.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                add(quadrado);
+            }
         }
 
         setLocation(new Point(0, 0)); // Centraliza a janela
     }
+
+
+    // Método que retorna a imagem da entidade
+    public Image getImageParaEntidade(int x, int y) {
+        Entidade entidade = flo.getEntidade(x, y);
+        if (entidade instanceof Pedra) {
+            return carregarImagem("assets/pedra.png");
+        } else if (entidade instanceof Arvore) {
+            Arvore arvore = (Arvore) entidade;
+            return carregarImagem("assets/arvore_" + arvore.getTipo().getClass().getSimpleName().toLowerCase() + ".png");
+        } else if (entidade instanceof Fruta) {
+            Fruta fruta = (Fruta) entidade;
+            return carregarImagem("assets/fruta_" + fruta.getClass().getSimpleName().toLowerCase() + ".png");
+        }
+        return null;
+    }
+
+    // Método auxiliar para carregar a imagem
+    private Image carregarImagem(String caminho) {
+        return Toolkit.getDefaultToolkit().getImage(caminho);
+    }
+
 }
