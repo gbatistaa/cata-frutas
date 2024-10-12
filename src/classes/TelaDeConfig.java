@@ -5,20 +5,18 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
 public class TelaDeConfig extends JFrame {
     private JTextField dimensaoField, pedrasField, probBichadasField, capacidadeMochilaField;
     private JTextField maracujaField, laranjaField, abacateField, cocoField, acerolaField, amoraField, goiabaField; // Campos para frutas
     private JTextField arvoresMaracujaField, arvoresLaranjaField, arvoresAbacateField, arvoresCocoField, arvoresAcerolaField, arvoresAmoraField, arvoresGoiabaField; // Campos para árvores por fruta
-    private JButton startButton;
+    private JButton startButton, importButton;
 
     public TelaDeConfig() {
         setTitle("Configuração do Jogo Cata-Frutas");
@@ -68,6 +66,10 @@ public class TelaDeConfig extends JFrame {
 
         // Botão para iniciar o jogo
         startButton = new JButton("Iniciar Jogo");
+
+        importButton = new JButton("Importar Configuração");
+
+
 
         // Adiciona os componentes à janela
         add(dimensaoLabel);
@@ -122,6 +124,10 @@ public class TelaDeConfig extends JFrame {
         add(new JLabel()); // Espaço vazio
         add(startButton);
 
+        add(new JLabel()); // Espaço vazio
+        add(importButton);
+
+
         // Ação do botão de iniciar jogo
         startButton.addActionListener(new ActionListener() {
             @Override
@@ -156,19 +162,41 @@ public class TelaDeConfig extends JFrame {
                 System.out.println("Configuração criada: " + config);
 
                 SwingUtilities.invokeLater(() -> {
-                    JFrame frame = new JFrame("Cata-frutas");
-                    Jogo jogo = new Jogo();
-                    Floresta f = new Floresta();
-                    f.gerar(config);
-                    System.out.println("Floresta criada: \n" + f);
-                    frame.add(jogo);
-                    frame.setSize(600, 600);
-                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                    frame.setResizable(false);
-                    frame.setVisible(true);
-                    jogo.render(config);
+
                 });
             }
         });
+
+        importButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser fileChooser = new JFileChooser();
+                int result = fileChooser.showOpenDialog(TelaDeConfig.this);
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    File selectedFile = fileChooser.getSelectedFile();
+                    // Aqui você pode realizar o tratamento para carregar a configuração do arquivo
+                    try {
+                        Configuracao config = Configuracao.lerConfiguracao(selectedFile.getAbsolutePath());
+                        inicializarJogo(config);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            }
+        });
+    }
+
+    private void inicializarJogo(Configuracao config) {
+        JFrame frame = new JFrame("Cata-frutas");
+        Jogo jogo = new Jogo();
+        Floresta f = new Floresta();
+        f.gerar(config);
+        System.out.println("Floresta criada: \n" + f);
+        frame.add(jogo);
+        frame.setSize(600, 600);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(false);
+        frame.setVisible(true);
+        jogo.render(config);
     }
 }
