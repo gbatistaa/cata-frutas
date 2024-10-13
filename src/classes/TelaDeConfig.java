@@ -20,10 +20,10 @@ public class TelaDeConfig extends JFrame {
 
     public TelaDeConfig() {
         setTitle("Configuração do Jogo Cata-Frutas");
-        setSize(600, 600);
+        setSize(650, 700);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setLayout(new GridLayout(0, 2, 10, 10));
+        setLayout(new GridLayout(0, 2, 6, 6));
         getContentPane().setBackground(Color.LIGHT_GRAY);
 
         // Campos de entrada de dados
