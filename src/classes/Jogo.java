@@ -144,32 +144,19 @@ public class Jogo extends JPanel {
     // Método que retorna a imagem da entidade
     public Image getImageParaEntidade(int x, int y) {
         Entidade entidade = flo.getEntidade(x, y);
+        Recursos recursos = Recursos.getInstancia(); // Obtenha a instância única de Recursos
+
         if (entidade instanceof Pedra) {
-            return carregarImagem("assets/pedra.png");
+            return recursos.carregarImagem("assets/pedra.png");
         } else if (entidade instanceof Arvore) {
             Arvore arvore = (Arvore) entidade;
-            return carregarImagem("assets/arvore_" + arvore.getTipo().getClass().getSimpleName().toLowerCase() + ".png");
+            return recursos.carregarImagem("assets/arvore_" + arvore.getTipo().getClass().getSimpleName().toLowerCase() + ".png");
         } else if (entidade instanceof Fruta) {
             Fruta fruta = (Fruta) entidade;
-            return carregarImagem("assets/fruta_" + fruta.getClass().getSimpleName().toLowerCase() + ".png");
-        }
-
-        // Verifica se a posição contém um dos jogadores
-        if (um.getX() == x && um.getY() == y) {
-            return carregarImagem("assets/null.png"); // Imagem do jogador um
-        }
-        if (dois.getX() == x && dois.getY() == y) {
-            return carregarImagem("assets/null.png"); // Imagem do jogador dois
+            return recursos.carregarImagem("assets/fruta_" + fruta.getClass().getSimpleName().toLowerCase() + ".png");
         }
 
         return null;
-    }
-
-
-    // Método auxiliar para carregar a imagem
-    private Image carregarImagem(String caminho) {
-        String caminhoAbsoluto = new File(caminho).getAbsolutePath();
-        return Toolkit.getDefaultToolkit().getImage(caminhoAbsoluto);
     }
 
 
