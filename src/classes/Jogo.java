@@ -7,7 +7,6 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
-import java.net.URL;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
@@ -16,13 +15,17 @@ public class Jogo extends JPanel {
     private boolean ativo = false;
     private Configuracao config;
     private Floresta flo;
+    private int poderUsado = 0;
+    private Boolean turnoJogadorUm = true;
 
     /**
      * Construtor do jogo.
      */
-    public Jogo(Floresta floresta) {
-        um = new Jogador(0, 0, Color.RED); // Inicializa jogador1 na posição (0, 0)
-        dois = new Jogador(5, 5, Color.BLUE); // Inicializa jogador2 na posição (5, 5)
+    public Jogo(Floresta floresta, Configuracao config)
+    {
+        this.config = config;
+        um = new Jogador(config.getDimensao() / 2, 0, Color.RED); // Inicializa jogador1 na posição (0, 0)
+        dois = new Jogador(config.getDimensao() / 2, config.getDimensao() - 1, Color.BLUE); // Inicializa jogador2 na posição (5, 5)
         this.flo = floresta;
         // Configura o foco para o painel
         setFocusable(true);
@@ -105,17 +108,26 @@ public class Jogo extends JPanel {
         setLayout(new GridLayout(config.getDimensao(), config.getDimensao()));
 
         // Cria os quadrados do tabuleiro
-        for (int i = 0; i < config.getDimensao(); i++) {
-            for (int j = 0; j < config.getDimensao(); j++) {
-                int finalI = i;
-                int finalJ = j;
+        for (int y = 0; y < config.getDimensao(); y++) {
+            for (int x = 0; x < config.getDimensao(); x++) {
+                int finalY = y;
+                int finalX = x;
                 JPanel quadrado = new JPanel() {
                     @Override
                     protected void paintComponent(Graphics g) {
                         super.paintComponent(g);
-                        Image imagem = getImageParaEntidade(finalI, finalJ); // Obtém a imagem da entidade
+                        Image imagem = getImageParaEntidade(finalX, finalY); // Obtém a imagem da entidade
                         if (imagem != null) {
                             g.drawImage(imagem, 0, 0, getWidth(), getHeight(), this); // Desenha a imagem no painel
+                        }
+                        // Verifica se a posição contém um dos jogadores
+                        if (um.getX() == finalX && um.getY() == finalY) {
+                            g.setColor(um.getColor()); // Usa a cor do jogador um
+                            g.fillOval(0, 0, getWidth(), getHeight()); // Desenha o jogador um
+                        }
+                        if (dois.getX() == finalX && dois.getY() == finalY) {
+                            g.setColor(dois.getColor()); // Usa a cor do jogador dois
+                            g.fillOval(0, 0, getWidth(), getHeight()); // Desenha o jogador dois
                         }
                     }
                 };
@@ -126,6 +138,7 @@ public class Jogo extends JPanel {
 
         setLocation(new Point(0, 0)); // Centraliza a janela
     }
+
 
 
     // Método que retorna a imagem da entidade
@@ -140,8 +153,18 @@ public class Jogo extends JPanel {
             Fruta fruta = (Fruta) entidade;
             return carregarImagem("assets/fruta_" + fruta.getClass().getSimpleName().toLowerCase() + ".png");
         }
+
+        // Verifica se a posição contém um dos jogadores
+        if (um.getX() == x && um.getY() == y) {
+            return carregarImagem("assets/null.png"); // Imagem do jogador um
+        }
+        if (dois.getX() == x && dois.getY() == y) {
+            return carregarImagem("assets/null.png"); // Imagem do jogador dois
+        }
+
         return null;
     }
+
 
     // Método auxiliar para carregar a imagem
     private Image carregarImagem(String caminho) {

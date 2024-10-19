@@ -244,7 +244,7 @@ public class TelaDeConfig extends JFrame {
     private void inicializarJogo(Configuracao config) {
         JFrame frame = new JFrame("Cata-frutas");
         Floresta f = new Floresta();
-        Jogo jogo = new Jogo(f);
+        Jogo jogo = new Jogo(f, config);
         f.gerar(config);
         System.out.println("Floresta criada: \n" + f);
         frame.add(jogo);

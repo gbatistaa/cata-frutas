@@ -50,6 +50,8 @@ public class Jogador extends Entidade {
         this.poderDefesa = poderDefesa;
     }
 
+    public Color getColor() { return color; }
+
     /**
      * Coleta uma fruta e a adiciona à mochila do jogador.
      *
