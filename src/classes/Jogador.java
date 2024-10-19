@@ -44,11 +44,12 @@ public class Jogador extends Entidade {
      *
      * @param fruta A fruta a ser coletada.
      */
-    public void coletar(Fruta fruta) {
+    public void coletar(Fruta fruta , Floresta flo) {
         if (mochila.adicionarFruta(fruta)) {
             fruta.aoColetar(this);
         }
-        // Lógica qualquer
+       
+		
     }
 
     /**

@@ -3,9 +3,11 @@
  */
 package classes;
 
+import java.util.Random;
+
 public abstract class Fruta extends Entidade {
     private int peso = 1;
-    private boolean bichada = false;
+    private boolean bichada ;
 
     public int getPeso() {
         return peso;
@@ -15,7 +17,16 @@ public abstract class Fruta extends Entidade {
         this.peso = peso;
     }
 
-    public boolean isBichada() {
+    public boolean isBichada(Configuracao config) {
+    	Random random = new Random();
+    	int numeroAleatorio = random.nextInt(101); 
+
+    	if (config.getProbBichadas() > numeroAleatorio ) {
+			this.bichada = true;
+			
+		} else {
+			this.bichada= false;
+		}
         return bichada;
     }
 

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Random;
 
 public class Mochila {
-    private final int capacidade;
+    private  int capacidade;
     private final List<Fruta> frutas;
 
     /**
@@ -52,7 +52,10 @@ public class Mochila {
     public int getCapacidade() {
         return capacidade;
     }
-
+    public void setCapacidade(int capacidade) {
+		this.capacidade = capacidade;
+	}
+    
     public int getQuantidadeFrutas() { return frutas.size(); }
 
     /**
@@ -81,4 +84,6 @@ public class Mochila {
 
         return fruta;
     }
+
+	
 }

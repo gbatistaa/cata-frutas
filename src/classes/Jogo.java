@@ -74,7 +74,7 @@ public class Jogo extends JPanel {
                     case KeyEvent.VK_ENTER:
                         Entidade noLocal = flo.getEntidade(movedor.getX(), movedor.getY());
                         if(noLocal instanceof Fruta) {
-                            movedor.coletar((Fruta) noLocal);
+                            movedor.coletar((Fruta) noLocal , floresta);
                             flo.setEntidade(movedor.getX(), movedor.getY(), null);
                         }
                         break;
@@ -109,7 +109,7 @@ public class Jogo extends JPanel {
      *
      * @param config A configuração do jogo, incluindo dimensões do tabuleiro.
      */
-    private void render(Configuracao config) {
+    void render(Configuracao config) {
         // Define o layout do tabuleiro (grade)
         setLayout(new GridLayout(config.getDimensao(), config.getDimensao()));
 
@@ -138,6 +138,8 @@ public class Jogo extends JPanel {
                     }
                 };
                 quadrado.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                quadrado.setBackground(new Color(124, 252, 0));
+
                 add(quadrado);
             }
         }
@@ -170,6 +172,8 @@ public class Jogo extends JPanel {
 
         return null;
     }
+    
+    
 
     /**
      * Move o jogador na direção especificada, considerando as regras do jogo.

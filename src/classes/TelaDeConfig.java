@@ -248,7 +248,7 @@ public class TelaDeConfig extends JFrame {
         f.gerar(config);
         System.out.println("Floresta criada: \n" + f);
         frame.add(jogo);
-        frame.setSize(600, 600);
+        frame.setSize(800, 800);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
         frame.setVisible(true);

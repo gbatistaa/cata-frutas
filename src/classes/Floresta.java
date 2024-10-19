@@ -52,6 +52,7 @@ public class Floresta {
      */
     public void removeEntidade(int x, int y) {
         mapa[x][y] = null; // Remove a entidade da posição
+        System.out.println("A entidade foi removida (coletada)");
     }
 
     /**
