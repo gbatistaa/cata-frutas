@@ -17,8 +17,6 @@ public class Floresta {
 
     /**
      * Construtor da floresta.
-     *
-     * @param dimensao A dimensão da floresta.
      */
     public Floresta() {
         super();

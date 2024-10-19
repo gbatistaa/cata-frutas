@@ -34,6 +34,12 @@ public abstract class Entidade {
         this.y += deltaY;
     }
 
+    /**
+     * Move o jogador em uma direção específica por um número determinado de casas.
+     *
+     * @param direcao A direção para a qual o jogador deve se mover. Pode ser uma das direções: CIMA, BAIXO, DIREITA ou ESQUERDA.
+     * @param casas O número de casas a serem movidas na direção especificada.
+     */
     public void mover(Direcao direcao, int casas) {
         switch(direcao) {
             case Direcao.CIMA -> y -= casas;

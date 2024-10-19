@@ -11,6 +11,9 @@ import java.util.Objects;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
+/**
+ * Representa a lógica do jogo, incluindo o gerenciamento dos jogadores e do tabuleiro.
+ */
 public class Jogo extends JPanel {
     private Jogador um, dois;
     private boolean ativo = false;
@@ -25,6 +28,16 @@ public class Jogo extends JPanel {
      */
     public Jogo(Floresta floresta, Configuracao config)
     {
+        Inicializar(floresta, config);
+    }
+
+    /**
+     * Inicializa os componentes do jogo.
+     *
+     * @param floresta A floresta que contém as entidades do jogo.
+     * @param config   A configuração do jogo, incluindo dimensões e capacidade da mochila.
+     */
+    private void Inicializar(Floresta floresta, Configuracao config) {
         movimentos = (int) (Math.random() * 12);
         System.out.println("MOVIMENTOS: " + movimentos);
 
@@ -91,33 +104,12 @@ public class Jogo extends JPanel {
         });
     }
 
-    public boolean isAtivo() {
-        return ativo;
-    }
-
-    public Configuracao getConfig() {
-        return config;
-    }
-
-    public void iniciar() {
-        ativo = true;
-    }
-
-    public void carregarConfig(String path) {
-        // Carrega a configuração do jogo a partir do arquivo especificado
-    }
-
-    public void update() {
-        // Lógica do jogo
-        try {
-            System.in.read();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        ativo = false;
-    }
-
-    public void render(Configuracao config) {
+    /**
+     * Renderiza o tabuleiro do jogo de acordo com a configuração fornecida.
+     *
+     * @param config A configuração do jogo, incluindo dimensões do tabuleiro.
+     */
+    private void render(Configuracao config) {
         // Define o layout do tabuleiro (grade)
         setLayout(new GridLayout(config.getDimensao(), config.getDimensao()));
 
@@ -155,7 +147,13 @@ public class Jogo extends JPanel {
 
 
 
-    // Método que retorna a imagem da entidade
+    /**
+     * Retorna a imagem da entidade na posição especificada.
+     *
+     * @param x A coordenada x da entidade.
+     * @param y A coordenada y da entidade.
+     * @return A imagem correspondente à entidade, ou null se não houver entidade.
+     */
     public Image getImageParaEntidade(int x, int y) {
         Entidade entidade = flo.getEntidade(x, y);
         Recursos recursos = Recursos.getInstancia(); // Obtenha a instância única de Recursos
@@ -173,6 +171,12 @@ public class Jogo extends JPanel {
         return null;
     }
 
+    /**
+     * Move o jogador na direção especificada, considerando as regras do jogo.
+     *
+     * @param jogador O jogador a ser movido.
+     * @param dir     A direção para a qual o jogador deve se mover.
+     */
     private void AoMover(Jogador jogador, Direcao dir) {
         int prevX = jogador.getX();
         int prevY = jogador.getY();

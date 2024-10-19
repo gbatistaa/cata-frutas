@@ -64,6 +64,11 @@ public class Mochila {
         return frutas;
     }
 
+    /**
+     * Remove uma fruta aleatória da mochila.
+     *
+     * @return A fruta removida, ou null se não houver frutas disponíveis.
+     */
     public Fruta removerFrutaAleatoria() {
         if (frutas.isEmpty()) {
             return null;
