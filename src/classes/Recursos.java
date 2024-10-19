@@ -13,6 +13,8 @@ public class Recursos {
     // Cache de imagens
     private Map<String, Image> cacheImagens;
 
+    private Floresta floresta;
+
     // Construtor privado para evitar instâncias fora da classe
     private Recursos() {
         cacheImagens = new HashMap<>();
@@ -38,4 +40,7 @@ public class Recursos {
         // Retorna a imagem do cache
         return cacheImagens.get(caminho);
     }
+
+    public void setFloresta(Floresta floresta) { this.floresta = floresta; }
+    public Floresta getFloresta() { return floresta; }
 }

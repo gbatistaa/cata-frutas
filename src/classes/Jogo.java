@@ -30,8 +30,12 @@ public class Jogo extends JPanel {
 
         this.config = config;
         um = new Jogador(config.getDimensao() / 2, 0, Color.RED); // Inicializa jogador1 na posição (0, 0)
+        um.setMochila(new Mochila(config.getCapacidadeMochila()));
         dois = new Jogador(config.getDimensao() / 2, config.getDimensao() - 1, Color.BLUE); // Inicializa jogador2 na posição (5, 5)
+        dois.setMochila(new Mochila(config.getCapacidadeMochila()));
+
         this.flo = floresta;
+        Recursos.getInstancia().setFloresta(flo);
         // Configura o foco para o painel
         setFocusable(true);
 
@@ -62,6 +66,13 @@ public class Jogo extends JPanel {
                             break;
                         AoMover(movedor, Direcao.DIREITA);
                         break;
+                    case KeyEvent.VK_ENTER:
+                        Entidade noLocal = flo.getEntidade(movedor.getX(), movedor.getY());
+                        if(noLocal instanceof Fruta) {
+                            movedor.coletar((Fruta) noLocal);
+                            flo.setEntidade(movedor.getX(), movedor.getY(), null);
+                        }
+                        break;
                 }
                 // Atualiza o desenho na tela
                 repaint();
@@ -72,6 +83,7 @@ public class Jogo extends JPanel {
                     movimentos = (int) (Math.random() * 12);
                     System.out.println("TROCA DE TURNO");
                     System.out.println("MOVIMENTOS: " + movimentos);
+                    System.out.println(turnoJogadorUm ? um : dois);
                 }
             }
 
@@ -174,6 +186,16 @@ public class Jogo extends JPanel {
         int prevY = jogador.getY();
 
         jogador.mover(dir, 1);
+
+        if(um.getX() == dois.getX() && um.getY() == dois.getY()) {
+            jogador.setX(prevX);
+            jogador.setY(prevY);
+            Jogador empurrador = turnoJogadorUm ? um : dois;
+            Jogador empurrado = turnoJogadorUm ? dois : um;
+            empurrador.empurrar(empurrado);
+            movimentos--;
+            return;
+        }
 
         // Verifica se o movimento resultou em uma posição válida
         if (jogador.getX() >= 0 && jogador.getX() < config.getDimensao() &&

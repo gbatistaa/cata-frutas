@@ -5,6 +5,7 @@ package classes;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Mochila {
     private final int capacidade;
@@ -61,5 +62,18 @@ public class Mochila {
      */
     public List<Fruta> getFrutas() {
         return frutas;
+    }
+
+    public Fruta removerFrutaAleatoria() {
+        if (frutas.isEmpty()) {
+            return null;
+        }
+
+        Random random = new Random();
+        int indiceAleatorio = random.nextInt(frutas.size());
+
+        Fruta fruta = frutas.remove(indiceAleatorio);
+
+        return fruta;
     }
 }
