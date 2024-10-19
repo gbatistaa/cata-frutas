@@ -15,7 +15,7 @@ public class Jogo extends JPanel {
     private boolean ativo = false;
     private Configuracao config;
     private Floresta flo;
-    private int poderUsado = 0;
+    private int movimentos = 0;
     private Boolean turnoJogadorUm = true;
 
     /**
@@ -23,6 +23,7 @@ public class Jogo extends JPanel {
      */
     public Jogo(Floresta floresta, Configuracao config)
     {
+        movimentos = (int) (Math.random() * 12);
         this.config = config;
         um = new Jogador(config.getDimensao() / 2, 0, Color.RED); // Inicializa jogador1 na posição (0, 0)
         dois = new Jogador(config.getDimensao() / 2, config.getDimensao() - 1, Color.BLUE); // Inicializa jogador2 na posição (5, 5)
@@ -35,34 +36,43 @@ public class Jogo extends JPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 int keyCode = e.getKeyCode();
+                Jogador movedor = turnoJogadorUm ? um : dois;
                 switch (keyCode) {
                     case KeyEvent.VK_UP:
-                        um.mover(0, -1); // Move para cima
+                        if(movedor.getY() <= 0)
+                            break;
+                        movedor.mover(0, -1); // Move para cima
+                        movimentos--;
                         break;
                     case KeyEvent.VK_DOWN:
-                        um.mover(0, 1); // Move para baixo
+                        if(movedor.getY() >= config.getDimensao() - 1)
+                            break;
+                        movedor.mover(0, 1); // Move para baixo
+                        movimentos--;
                         break;
                     case KeyEvent.VK_LEFT:
-                        um.mover(-1, 0); // Move para a esquerda
+                        if(movedor.getX() <= 0)
+                            break;
+                        movedor.mover(-1, 0); // Move para a esquerda
+                        movimentos--;
                         break;
                     case KeyEvent.VK_RIGHT:
-                        um.mover(1, 0); // Move para a direita
-                        break;
-                    case KeyEvent.VK_W:
-                        dois.mover(0, -1); // Move para cima
-                        break;
-                    case KeyEvent.VK_S:
-                        dois.mover(0, 1); // Move para baixo
-                        break;
-                    case KeyEvent.VK_A:
-                        dois.mover(-1, 0); // Move para a esquerda
-                        break;
-                    case KeyEvent.VK_D:
-                        dois.mover(1, 0); // Move para a direita
+                        if(movedor.getY() >= config.getDimensao() - 1)
+                            break;
+                        movedor.mover(1, 0); // Move para a direita
+                        movimentos--;
                         break;
                 }
                 // Atualiza o desenho na tela
                 repaint();
+                System.out.println("MOVIMENTOS: " + movimentos);
+
+                if(movimentos <= 0) {
+                    turnoJogadorUm = !turnoJogadorUm;
+                    movimentos = (int) (Math.random() * 12);
+                    System.out.println("TROCA DE TURNO");
+                    System.out.println("MOVIMENTOS: " + movimentos);
+                }
             }
 
             @Override
@@ -157,6 +167,10 @@ public class Jogo extends JPanel {
         }
 
         return null;
+    }
+
+    private void AoMover() {
+
     }
 
 

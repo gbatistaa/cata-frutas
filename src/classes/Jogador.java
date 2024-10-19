@@ -9,14 +9,14 @@ public class Jogador extends Entidade {
     private Mochila mochila;
     private Color color;
     private int pontosVitoria = 0;
-    private int poderForca = 1;
-    private int poderDefesa = 1;
 
     public Jogador(int x, int y, Color color) {
         setX(x);
         setY(y);
         this.color = color;
     }
+
+    public int getPoder() { return mochila.getQuantidadeFrutas(); }
 
     public Mochila getMochila() {
         return mochila;
@@ -32,22 +32,6 @@ public class Jogador extends Entidade {
 
     public void setPontosVitoria(int pontosVitoria) {
         this.pontosVitoria = pontosVitoria;
-    }
-
-    public int getPoderForca() {
-        return poderForca;
-    }
-
-    public void setPoderForca(int poderForca) {
-        this.poderForca = poderForca;
-    }
-
-    public int getPoderDefesa() {
-        return poderDefesa;
-    }
-
-    public void setPoderDefesa(int poderDefesa) {
-        this.poderDefesa = poderDefesa;
     }
 
     public Color getColor() { return color; }

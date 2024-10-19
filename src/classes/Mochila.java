@@ -52,6 +52,8 @@ public class Mochila {
         return capacidade;
     }
 
+    public int getQuantidadeFrutas() { return frutas.size(); }
+
     /**
      * Retorna a lista de frutas na mochila.
      *
