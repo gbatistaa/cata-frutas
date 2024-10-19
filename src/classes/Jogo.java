@@ -47,23 +47,15 @@ public class Jogo extends JPanel {
                 Jogador movedor = turnoJogadorUm ? um : dois;
                 switch (keyCode) {
                     case KeyEvent.VK_UP:
-                        if(movedor.getY() <= 0)
-                            break;
                         AoMover(movedor, Direcao.CIMA);
                         break;
                     case KeyEvent.VK_DOWN:
-                        if(movedor.getY() >= config.getDimensao() - 1)
-                            break;
                         AoMover(movedor, Direcao.BAIXO);
                         break;
                     case KeyEvent.VK_LEFT:
-                        if(movedor.getX() <= 0)
-                            break;
                         AoMover(movedor, Direcao.ESQUERDA);
                         break;
                     case KeyEvent.VK_RIGHT:
-                        if(movedor.getY() >= config.getDimensao() - 1)
-                            break;
                         AoMover(movedor, Direcao.DIREITA);
                         break;
                     case KeyEvent.VK_ENTER:
