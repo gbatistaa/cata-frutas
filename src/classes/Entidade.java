@@ -33,4 +33,13 @@ public abstract class Entidade {
         this.x += deltaX;
         this.y += deltaY;
     }
+
+    public void mover(Direcao direcao, int casas) {
+        switch(direcao) {
+            case Direcao.CIMA -> y -= casas;
+            case Direcao.BAIXO -> y += casas;
+            case Direcao.DIREITA -> x += casas;
+            case Direcao.ESQUERDA -> x -= casas;
+        }
+    }
 }

@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
+import java.util.Objects;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
@@ -17,6 +18,7 @@ public class Jogo extends JPanel {
     private Floresta flo;
     private int movimentos = 0;
     private Boolean turnoJogadorUm = true;
+    private Direcao ultimoMov;
 
     /**
      * Construtor do jogo.
@@ -24,6 +26,8 @@ public class Jogo extends JPanel {
     public Jogo(Floresta floresta, Configuracao config)
     {
         movimentos = (int) (Math.random() * 12);
+        System.out.println("MOVIMENTOS: " + movimentos);
+
         this.config = config;
         um = new Jogador(config.getDimensao() / 2, 0, Color.RED); // Inicializa jogador1 na posição (0, 0)
         dois = new Jogador(config.getDimensao() / 2, config.getDimensao() - 1, Color.BLUE); // Inicializa jogador2 na posição (5, 5)
@@ -41,26 +45,22 @@ public class Jogo extends JPanel {
                     case KeyEvent.VK_UP:
                         if(movedor.getY() <= 0)
                             break;
-                        movedor.mover(0, -1); // Move para cima
-                        movimentos--;
+                        AoMover(movedor, Direcao.CIMA);
                         break;
                     case KeyEvent.VK_DOWN:
                         if(movedor.getY() >= config.getDimensao() - 1)
                             break;
-                        movedor.mover(0, 1); // Move para baixo
-                        movimentos--;
+                        AoMover(movedor, Direcao.BAIXO);
                         break;
                     case KeyEvent.VK_LEFT:
                         if(movedor.getX() <= 0)
                             break;
-                        movedor.mover(-1, 0); // Move para a esquerda
-                        movimentos--;
+                        AoMover(movedor, Direcao.ESQUERDA);
                         break;
                     case KeyEvent.VK_RIGHT:
                         if(movedor.getY() >= config.getDimensao() - 1)
                             break;
-                        movedor.mover(1, 0); // Move para a direita
-                        movimentos--;
+                        AoMover(movedor, Direcao.DIREITA);
                         break;
                 }
                 // Atualiza o desenho na tela
@@ -169,8 +169,38 @@ public class Jogo extends JPanel {
         return null;
     }
 
-    private void AoMover() {
+    private void AoMover(Jogador jogador, Direcao dir) {
+        int prevX = jogador.getX();
+        int prevY = jogador.getY();
 
+        jogador.mover(dir, 1);
+
+        // Verifica se o movimento resultou em uma posição válida
+        if (jogador.getX() >= 0 && jogador.getX() < config.getDimensao() &&
+                jogador.getY() >= 0 && jogador.getY() < config.getDimensao()) {
+
+            // Se a nova posição do jogador contém uma Pedra
+            if (flo.getEntidade(jogador.getX(), jogador.getY()) instanceof Pedra) {
+                // Mover novamente na mesma direção para pular a pedra
+                jogador.mover(dir, 1); // Mover mais 1 unidade
+
+                // Verifica se o novo movimento também é válido
+                if (jogador.getX() > 0 && jogador.getX() < config.getDimensao() - 1 &&
+                        jogador.getY() > 0 && jogador.getY() < config.getDimensao() - 1) {
+                    movimentos -= 3;
+                } else {
+                    // Se não for um movimento válido, retornar à posição anterior
+                    jogador.setX(prevX);
+                    jogador.setY(prevY);
+                }
+            } else {
+                movimentos--;
+            }
+        } else {
+            // Se o movimento não for válido, retornar à posição anterior
+            jogador.setX(prevX);
+            jogador.setY(prevY);
+        }
     }
 
 
