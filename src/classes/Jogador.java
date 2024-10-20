@@ -13,7 +13,7 @@ public class Jogador extends Entidade {
     private int pontosVitoria = 0;
     private int multiplicadorPoder = 1;
 
-    public Jogador(int x, int y, Color color) {
+	public Jogador(int x, int y, Color color) {
         setX(x);
         setY(y);
         this.color = color;
@@ -97,14 +97,57 @@ public class Jogador extends Entidade {
     }
 
 
-    /**
-     * Consome uma fruta.
-     *
-     * @param fruta A fruta a ser consumida.
-     */
-    public void consumirFruta(Fruta fruta) {
-        // Lógica de consumir fruta
-    }
+    public int consumirCoco(Mochila mochila , Configuracao config) {
+		// TODO Auto-generated method stub
+        List<Fruta> frutasNaMochila = mochila.getFrutas(); 
+        Fruta coco = null; 
+        for (Fruta fruta : frutasNaMochila) {
+        	if (fruta.getClass().getSimpleName().equals("Coco")) {
+				coco = fruta;
+			}        	
+        }
+        if (coco != null && !coco.isBichada(config)) {
+        	this.mochila.removerFruta(coco);
+        	System.out.println("Coco consumido");
+			 return 0;
+		}else if(coco != null && coco.isBichada(config)) {
+			System.out.println("A fruta está bichada");
+			return 1;
+		}else {
+			System.out.println("Não há cocos na mochila");
+			return 2;
+		}
+	
+			
+		}
+	
+
+	public void consumirLaranja(Mochila mochila , Configuracao config) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void consumirAcerola(Mochila mochila , Configuracao config) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void consumirGoiaba(Mochila mochila , Configuracao config) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void consumirAbacate(Mochila mochila , Configuracao config) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void consumirAmora(Mochila mochila , Configuracao config) {
+		// TODO Auto-generated method stub
+		
+	}
+    
+    
 
     @Override
     public String toString() {
@@ -127,4 +170,8 @@ public class Jogador extends Entidade {
 
         return sb.toString(); // Retorna a representação em string do jogador
     }
+
+	
+
+	
 }

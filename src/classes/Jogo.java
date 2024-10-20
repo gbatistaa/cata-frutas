@@ -4,13 +4,17 @@
 package classes;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
+import java.io.PrintStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
-import javax.swing.BorderFactory;
-import javax.swing.JPanel;
 
+import javax.swing.*;
 /**
  * Representa a lógica do jogo, incluindo o gerenciamento dos jogadores e do tabuleiro.
  */
@@ -23,7 +27,9 @@ public class Jogo extends JPanel {
     private Boolean turnoJogadorUm = true;
     private Direcao ultimoMov;
 
-    /**
+    
+
+	/**
      * Construtor do jogo.
      */
     public Jogo(Floresta floresta, Configuracao config)
@@ -78,6 +84,34 @@ public class Jogo extends JPanel {
                             flo.setEntidade(movedor.getX(), movedor.getY(), null);
                         }
                         break;
+                    case KeyEvent.VK_1:
+                    	int res = movedor.consumirCoco(movedor.getMochila(), config);
+                        if (res == 0) {
+                            movimentos *= 2;
+                            System.out.println("MOVIMENTOS: " + movimentos);
+                        }else if(res == 1) {
+                        	movimentos = 0;
+                            System.out.println("MOVIMENTOS: " + movimentos);
+                        }
+                        break;
+                    case KeyEvent.VK_2:
+                        movedor.consumirAbacate(movedor.getMochila(), config);
+                        break;
+                    case KeyEvent.VK_3:
+                        movedor.consumirLaranja(movedor.getMochila(), config);
+                        break;
+                    case KeyEvent.VK_4:
+                        movedor.consumirAcerola(movedor.getMochila(), config);
+                        break;
+                    case KeyEvent.VK_5:
+                        movedor.consumirAmora(movedor.getMochila(), config);
+                        break;
+                    case KeyEvent.VK_6:
+                        movedor.consumirGoiaba(movedor.getMochila() ,config);
+                        break;
+                    default:
+                        System.out.println("Você digitou um número que não corresponde a uma fruta");
+                        break;
                 }
                 // Atualiza o desenho na tela
                 repaint();
@@ -86,12 +120,18 @@ public class Jogo extends JPanel {
                 if(movimentos <= 0) {
                     turnoJogadorUm = !turnoJogadorUm;
                     movimentos = (int) (Math.random() * 12);
-                    System.out.println("TROCA DE TURNO");
+                    System.out.println("\n\nTROCA DE TURNO");
                     System.out.println("MOVIMENTOS: " + movimentos);
-                    System.out.println(turnoJogadorUm ? um : dois);
+                    if (turnoJogadorUm) {
+						System.out.println("Jogador vermelho joga.\n" + um);
+					} else {
+						System.out.println("Jogador azul joga.\n" + dois);
+
+					}
+                   // System.out.println(turnoJogadorUm ? um : dois);
                 }
             }
-
+            
             @Override
             public void keyReleased(KeyEvent e) {
                 // Não implementado
@@ -102,6 +142,7 @@ public class Jogo extends JPanel {
                 // Não implementado
             }
         });
+        
     }
 
     /**
@@ -109,23 +150,34 @@ public class Jogo extends JPanel {
      *
      * @param config A configuração do jogo, incluindo dimensões do tabuleiro.
      */
-    void render(Configuracao config) {
-        // Define o layout do tabuleiro (grade)
-        setLayout(new GridLayout(config.getDimensao(), config.getDimensao()));
+    void render( Floresta floresta , Configuracao config  ) {
+        // Define o layout principal como BorderLayout
+        setLayout(new BorderLayout());
+
+        // Painel do tabuleiro (à esquerda)
+        JPanel tabuleiro = new JPanel(new GridLayout(config.getDimensao(), config.getDimensao()));
 
         // Cria os quadrados do tabuleiro
         for (int y = 0; y < config.getDimensao(); y++) {
             for (int x = 0; x < config.getDimensao(); x++) {
                 int finalY = y;
                 int finalX = x;
+                
                 JPanel quadrado = new JPanel() {
                     @Override
                     protected void paintComponent(Graphics g) {
                         super.paintComponent(g);
+                        
+                        // Desenha a grama
+                        Image backgroundImage = Recursos.getInstancia().carregarImagem("assets/grama2.png");
+                        g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this); // Desenha a imagem de fundo
+
+                        // Desenha a imagem da entidade, se existir
                         Image imagem = getImageParaEntidade(finalX, finalY); // Obtém a imagem da entidade
                         if (imagem != null) {
                             g.drawImage(imagem, 0, 0, getWidth(), getHeight(), this); // Desenha a imagem no painel
                         }
+
                         // Verifica se a posição contém um dos jogadores
                         if (um.getX() == finalX && um.getY() == finalY) {
                             g.setColor(um.getColor()); // Usa a cor do jogador um
@@ -137,18 +189,43 @@ public class Jogo extends JPanel {
                         }
                     }
                 };
-                quadrado.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                quadrado.setBackground(new Color(124, 252, 0));
 
-                add(quadrado);
+                quadrado.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                tabuleiro.add(quadrado); // Adiciona o quadrado ao tabuleiro
             }
         }
 
+        // Adiciona o tabuleiro ao lado esquerdo
+        add(tabuleiro, BorderLayout.CENTER);
+
+        // Painel de mensagens e escolha de frutas (à direita)
+        JPanel painelLateral = new JPanel(new BorderLayout());
+        painelLateral.setPreferredSize(new Dimension(200, getHeight())); // Definir uma largura preferida para o painel lateral
+
+        // Área de texto para exibir mensagens do jogo
+        JTextArea areaMensagens = new JTextArea();
+        areaMensagens.setEditable(false); // Não permitir que o jogador edite as mensagens
+        JScrollPane scrollMensagens = new JScrollPane(areaMensagens);
+        painelLateral.add(scrollMensagens, BorderLayout.CENTER);    
+    
+
+    
+        
+
+
+        // Adiciona o painel lateral ao lado direito
+        add(painelLateral, BorderLayout.EAST);     
+
+        
+
+     // Redireciona a saída do console para o JTextArea
+        PrintStream printStream = new PrintStream(new CustomOutputStream(areaMensagens));
+        System.setOut(printStream); // Redireciona o System.out para o JTextArea
+        System.setErr(printStream); // Redireciona o System.err para o JTextArea (caso necessário)
         setLocation(new Point(0, 0)); // Centraliza a janela
     }
 
-
-
+ // 
     /**
      * Retorna a imagem da entidade na posição especificada.
      *

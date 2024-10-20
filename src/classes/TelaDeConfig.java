@@ -1,8 +1,10 @@
 package classes;
 
 import java.awt.Color;
+
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -241,17 +243,17 @@ public class TelaDeConfig extends JFrame {
 
     }
 
-    private void inicializarJogo(Configuracao config) {
+    private void inicializarJogo(Configuracao config)  {
         JFrame frame = new JFrame("Cata-frutas");
         Floresta f = new Floresta();
         Jogo jogo = new Jogo(f, config);
         f.gerar(config);
         System.out.println("Floresta criada: \n" + f);
         frame.add(jogo);
-        frame.setSize(800, 800);
+        frame.setSize(1100, 900);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
         frame.setVisible(true);
-        jogo.render(config);
+        jogo.render(f, config);
     }
 }
