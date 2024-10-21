@@ -12,6 +12,7 @@ public class Jogador extends Entidade {
     private Color color;
     private int pontosVitoria = 0;
     private int multiplicadorPoder = 1;
+    private boolean doente = false;
 
 	public Jogador(int x, int y, Color color) {
         setX(x);
@@ -112,6 +113,7 @@ public class Jogador extends Entidade {
 			 return 0;
 		}else if(coco != null && coco.isBichada(config)) {
 			System.out.println("A fruta está bichada");
+			this.doente = true;
 			return 1;
 		}else {
 			System.out.println("Não há cocos na mochila");
@@ -122,34 +124,70 @@ public class Jogador extends Entidade {
 		}
 	
 
-	public void consumirLaranja(Mochila mochila , Configuracao config) {
+	public int consumirLaranja(Mochila mochila , Configuracao config) {
 		// TODO Auto-generated method stub
-		
+		 List<Fruta> frutasNaMochila = mochila.getFrutas(); 
+	        Fruta laranja = null; 
+	        for (Fruta fruta : frutasNaMochila) {
+	        	if (fruta.getClass().getSimpleName().equals("Laranja")) {
+					laranja = fruta;
+				}        	
+	        }
+	        if (laranja != null && !laranja.isBichada(config)) {
+	        	this.mochila.removerFruta(laranja);
+	        	System.out.println("Laranja consumida");
+	        	this.doente= false;
+	        	System.out.println("Você tomou o antídoto");
+				 return 0;
+			}else if(laranja != null && laranja.isBichada(config)) {
+				System.out.println("A fruta está bichada");
+				this.doente = true;
+				return 1;
+			}else {
+				System.out.println("Não há laranjas na mochila");
+				return 2;
+			}
+	}
+	
+
+	public int consumirAbacate(Mochila mochila , Configuracao config) {
+		// TODO Auto-generated method stub
+		 List<Fruta> frutasNaMochila = mochila.getFrutas(); 
+	        Fruta abacate = null; 
+	        for (Fruta fruta : frutasNaMochila) {
+	        	if (fruta.getClass().getSimpleName().equals("Abacate")) {
+					abacate = fruta;
+				}        	
+	        }
+	        if (abacate != null && !abacate.isBichada(config)) {
+	        	this.mochila.removerFruta(abacate);
+	        	System.out.println("Abacate consumida");
+	        	this.multiplicadorPoder *= 2;
+	        	System.out.println("Você dobrou sua força");
+				 return 0;
+			}else if(abacate != null && abacate.isBichada(config)) {
+				System.out.println("A fruta está bichada");
+				this.doente = true;
+				return 1;
+			}else {
+				System.out.println("Não há abacates na mochila");
+				return 2;
+			}
 	}
 
-	public void consumirAcerola(Mochila mochila , Configuracao config) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void consumirGoiaba(Mochila mochila , Configuracao config) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void consumirAbacate(Mochila mochila , Configuracao config) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void consumirAmora(Mochila mochila , Configuracao config) {
-		// TODO Auto-generated method stub
-		
-	}
+	
     
     
 
-    @Override
+    public boolean isDoente() {
+		return doente;
+	}
+
+	public void setDoente(boolean doente) {
+		this.doente = doente;
+	}
+
+	@Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
 

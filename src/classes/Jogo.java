@@ -64,6 +64,10 @@ public class Jogo extends JPanel {
             public void keyPressed(KeyEvent e) {
                 int keyCode = e.getKeyCode();
                 Jogador movedor = turnoJogadorUm ? um : dois;
+                if (movedor.isDoente()) {
+					movimentos = 0;
+					movedor.setDoente(false);
+				}
                 switch (keyCode) {
                     case KeyEvent.VK_UP:
                         AoMover(movedor, Direcao.CIMA);
@@ -86,11 +90,8 @@ public class Jogo extends JPanel {
                         break;
                     case KeyEvent.VK_1:
                     	int res = movedor.consumirCoco(movedor.getMochila(), config);
-                        if (res == 0) {
+                        if (res == 0 ) {
                             movimentos *= 2;
-                            System.out.println("MOVIMENTOS: " + movimentos);
-                        }else if(res == 1) {
-                        	movimentos = 0;
                             System.out.println("MOVIMENTOS: " + movimentos);
                         }
                         break;
@@ -100,15 +101,7 @@ public class Jogo extends JPanel {
                     case KeyEvent.VK_3:
                         movedor.consumirLaranja(movedor.getMochila(), config);
                         break;
-                    case KeyEvent.VK_4:
-                        movedor.consumirAcerola(movedor.getMochila(), config);
-                        break;
-                    case KeyEvent.VK_5:
-                        movedor.consumirAmora(movedor.getMochila(), config);
-                        break;
-                    case KeyEvent.VK_6:
-                        movedor.consumirGoiaba(movedor.getMochila() ,config);
-                        break;
+                    
                     default:
                         System.out.println("Você digitou um número que não corresponde a uma fruta");
                         break;
