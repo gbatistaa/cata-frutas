@@ -30,9 +30,18 @@ public class Jogador extends Entidade {
         this.mochila = mochila;
     }
 
-    public int getPontosVitoria() {
-        return pontosVitoria;
-    }
+    public int getPontosVitoria(Mochila mochila) {
+    	 List<Fruta> frutasNaMochila = mochila.getFrutas(); 
+         Fruta maracuja = null; 
+         for (Fruta fruta : frutasNaMochila) {
+         	if (fruta.getClass().getSimpleName().equals("Maracuja")) {
+ 				pontosVitoria++;
+ 			}        	
+         }
+         return pontosVitoria;
+
+ 		}
+    
 
     public void setPontosVitoria(int pontosVitoria) {
         this.pontosVitoria = pontosVitoria;
