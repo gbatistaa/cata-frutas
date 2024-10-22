@@ -16,7 +16,7 @@ public class Configuracao {
     private int pedras;    
     private Map<String, Integer> arvoresPorFruta;
     private Map<String, Integer> frutasNoChao;
-    private float probBichadas;
+    private int probBichadas;
     private int capacidadeMochila;
 
 
@@ -30,7 +30,7 @@ public class Configuracao {
      * @param probBichadas A probabilidade de uma fruta ser bichada de 0 a 1.
      * @param capacidadeMochila A capacidade da mochila do jogador.
      */
-    public Configuracao(int dimensao, int pedras, Map<String, Integer> arvoresPorFruta, Map<String, Integer> frutasNoChao, float probBichadas, int capacidadeMochila) {
+    public Configuracao(int dimensao, int pedras, Map<String, Integer> arvoresPorFruta, Map<String, Integer> frutasNoChao, int probBichadas, int capacidadeMochila) {
         this.dimensao = dimensao;
         this.pedras = pedras;
         this.arvoresPorFruta = arvoresPorFruta;
@@ -287,7 +287,7 @@ public class Configuracao {
         for (String fruta : arvoresPorFruta.keySet()) {
             sb.append(fruta).append(" ").append(arvoresPorFruta.get(fruta)).append(" ").append(frutasNoChao.get(fruta)).append("\n");
         }
-        //sb.append("bichadas ").append(bichadas).append("\n");
+        sb.append("bichadas ").append(probBichadas).append("\n");
         sb.append("mochila ").append(capacidadeMochila).append("\n");
         return sb.toString();
     }

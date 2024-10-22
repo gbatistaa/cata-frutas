@@ -34,7 +34,14 @@ public class Jogador extends Entidade {
      * @return O poder do jogador.
      */
     public int getPoder() {
-        return mochila.getQuantidadeFrutas() * multiplicadorPoder;
+        return mochila.getQuantidadeFrutas();
+    }
+
+    /**
+     * Dobra o poder de empurrão (força de ataque) do jogador.
+     */
+    public void dobrarPoderEmpurrao() {
+        multiplicadorPoder *= 2;
     }
 
     /**
@@ -88,20 +95,7 @@ public class Jogador extends Entidade {
      */
     public void coletar(Fruta fruta) {
         if (mochila.adicionarFruta(fruta)) {
-            fruta.aoColetar(this);
             System.out.println("Coletou " + fruta.getClass().getSimpleName());
-        }
-    }
-
-    /**
-     * Coleta uma fruta e a adiciona à mochila do jogador, interagindo com a floresta.
-     *
-     * @param fruta A fruta a ser coletada.
-     * @param flo   A floresta em que a coleta ocorre.
-     */
-    public void coletar(Fruta fruta, Floresta flo) {
-        if (mochila.adicionarFruta(fruta)) {
-            fruta.aoColetar(this);
         }
     }
 
@@ -117,7 +111,7 @@ public class Jogador extends Entidade {
         int log2fa = (int) Math.round(Math.log(fa + 1) / Math.log(2));
         int log2fd = (int) Math.round(Math.log(fd + 1) / Math.log(2));
         int empurrao = Math.max(0, log2fa - log2fd);
-
+        multiplicadorPoder = 1;
         Random random = new Random();
         Floresta floresta = Recursos.getInstancia().getFloresta();
 

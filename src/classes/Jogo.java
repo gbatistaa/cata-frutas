@@ -51,6 +51,7 @@ public class Jogo extends JPanel {
     private void Inicializar(Floresta floresta, Configuracao config) {
         movimentos = (int) (Math.random() * 12);
         System.out.println("MOVIMENTOS: " + movimentos);
+        System.out.println("TOTAL DE MARACUJAS: " + config.getTotalDeFrutaPorNome("maracuja"));
 
         this.config = config;
         um = new Jogador(config.getDimensao() / 2, 0, Color.RED); // Inicializa jogador1 na posição (0, 0)
@@ -319,6 +320,7 @@ public class Jogo extends JPanel {
                     Maracuja maracuja = new Maracuja();
                     flo.setEntidade(novaPosX, novaPosY, maracuja);
                     System.out.println("MARACUJA INVOCADO EM X:" + novaPosX + ",Y:" + novaPosY);
+                    numMaracujasInvocados++;
                     return; // Saia após instanciar o Maracujá
                 }
             }
@@ -339,6 +341,13 @@ public class Jogo extends JPanel {
             // Obtenha a imagem da fruta, assumindo que há um método getImagem() em Fruta
             ImageIcon imagemFruta = new ImageIcon(getImagemParaEntidade(fruta)); // Altere aqui para a forma correta de obter a imagem
             JLabel labelFruta = new JLabel(imagemFruta); // Use a imagem como o ícone do JLabel
+
+            if (fruta.isBichada()) {
+                labelFruta.setOpaque(true); // Permite que o fundo do JLabel seja visível
+                labelFruta.setBackground(new Color(0x5a228b)); // Define a cor de fundo roxa
+            } else {
+                labelFruta.setOpaque(false); // Mantém o fundo padrão
+            }
 
             // Configurações do JLabel
             labelFruta.setText(fruta.getClass().getSimpleName()); // Define o nome da fruta como texto do JLabel
@@ -406,7 +415,7 @@ public class Jogo extends JPanel {
                     case KeyEvent.VK_ENTER:
                         Entidade noLocal = flo.getEntidade(movedor.getX(), movedor.getY());
                         if(noLocal instanceof Fruta) {
-                            movedor.coletar((Fruta) noLocal , flo);
+                            movedor.coletar((Fruta) noLocal);
                             flo.setEntidade(movedor.getX(), movedor.getY(), null);
                             atualizarInventario();
                         }
@@ -508,6 +517,13 @@ public class Jogo extends JPanel {
 
         // Calcula a nova largura com base na altura fornecida
         return (int) (altura * proporcao);
+    }
+
+    /**
+     * Dobra o numero de movimentos restantes na jogada.
+     */
+    public void dobrarMovimentos() {
+        movimentos *= 2;
     }
 
 

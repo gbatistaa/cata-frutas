@@ -1,3 +1,7 @@
+
+package classes;
+
+import java.util.Random;
 /**
  * A classe Fruta é uma classe abstrata que representa frutas que podem ser coletadas no jogo.
  * Ela contém propriedades comuns a todas as frutas e métodos que definem seu comportamento.
@@ -9,14 +13,16 @@
  *
  * @see Entidade
  */
-package classes;
-
-import java.util.Random;
-
 public abstract class Fruta extends Entidade {
     private int peso = 1;
     private boolean bichada;
 
+    public Fruta() {
+        int rand = (int) (Math.random() * 100 + 1);
+        System.out.println(rand);
+        if(Recursos.getInstancia().getConfig().getProbBichadas() <= rand)
+            bichada = true;
+    }
     /**
      * Retorna o peso da fruta.
      *
@@ -38,18 +44,9 @@ public abstract class Fruta extends Entidade {
     /**
      * Verifica se a fruta está bichada com base em uma configuração de probabilidade.
      *
-     * @param config A configuração que contém a probabilidade de a fruta estar bichada.
      * @return true se a fruta está bichada, false caso contrário.
      */
-    public boolean isBichada(Configuracao config) {
-        Random random = new Random();
-        int numeroAleatorio = random.nextInt(101);
-
-        if (config.getProbBichadas() > numeroAleatorio) {
-            this.bichada = true;
-        } else {
-            this.bichada = false;
-        }
+    public boolean isBichada() {
         return bichada;
     }
 
@@ -62,13 +59,9 @@ public abstract class Fruta extends Entidade {
         this.bichada = bichada;
     }
 
-    /**
-     * Define a lógica que deve ocorrer ao coletar a fruta.
-     *
-     * @param coletor O jogador que coletou a fruta.
-     */
-    public void aoColetar(Jogador coletor) {
-        // Lógica ao coletar fruta
+    public void aoConsumir(Jogador jogador, Jogo jogo) {
+        if(isBichada())
+            jogador.setDoente(true);
     }
 
     /**

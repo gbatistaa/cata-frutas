@@ -16,6 +16,7 @@ import javax.swing.*;
 
 public class TelaDeConfig extends JFrame {
     private JTextField dimensaoField, pedrasField, probBichadasField, capacidadeMochilaField;
+    private JTextField totalMaracujaField;
     private JTextField maracujaField, laranjaField, abacateField, cocoField, acerolaField, amoraField, goiabaField; // Campos para frutas
     private JTextField  arvoresLaranjaField, arvoresAbacateField, arvoresCocoField, arvoresAcerolaField, arvoresAmoraField, arvoresGoiabaField; // Campos para árvores por fruta
     private JButton startButton, importButton, exportButton;
@@ -51,6 +52,7 @@ public class TelaDeConfig extends JFrame {
         arvoresAcerolaField = new JTextField();
         arvoresAmoraField = new JTextField();
         arvoresGoiabaField = new JTextField();
+        totalMaracujaField = new JTextField();
 
         JLabel probBichadasLabel = new JLabel("Probabilidade de uma fruta estar bichada:");
         probBichadasField = new JTextField();
@@ -119,6 +121,9 @@ public class TelaDeConfig extends JFrame {
         add(probBichadasLabel);
         add(probBichadasField);
 
+        add(new JLabel("Total de maracujas"));
+        add(totalMaracujaField);
+
         add(capacidadeMochilaLabel);
         add(capacidadeMochilaField);
 
@@ -137,7 +142,7 @@ public class TelaDeConfig extends JFrame {
                 // Pega os dados do formulário
                 int dimensao = Integer.parseInt(dimensaoField.getText());
                 int pedras = Integer.parseInt(pedrasField.getText());
-                float pBichadas = Float.parseFloat(probBichadasField.getText());
+                int pBichadas = Integer.parseInt(probBichadasField.getText());
                 int capacidadeMochila = Integer.parseInt(capacidadeMochilaField.getText());
 
                 // Cria os mapas para frutas no chão e árvores por fruta
@@ -151,6 +156,7 @@ public class TelaDeConfig extends JFrame {
                 frutasNoChao.put("goiaba", Integer.parseInt(goiabaField.getText()));
 
                 Map<String, Integer> arvoresPorFruta = new HashMap<>();
+                arvoresPorFruta.put("maracuja", Integer.parseInt(totalMaracujaField.getText()));
                 arvoresPorFruta.put("laranja", Integer.parseInt(arvoresLaranjaField.getText()));
                 arvoresPorFruta.put("abacate", Integer.parseInt(arvoresAbacateField.getText()));
                 arvoresPorFruta.put("coco", Integer.parseInt(arvoresCocoField.getText()));
@@ -204,7 +210,7 @@ public class TelaDeConfig extends JFrame {
                     // Pega os dados do formulário
                     int dimensao = Integer.parseInt(dimensaoField.getText());
                     int pedras = Integer.parseInt(pedrasField.getText());
-                    float pBichadas = Float.parseFloat(probBichadasField.getText());
+                    int pBichadas = Integer.parseInt(probBichadasField.getText());
                     int capacidadeMochila = Integer.parseInt(capacidadeMochilaField.getText());
 
                     // Cria os mapas para frutas no chão e árvores por fruta
@@ -218,6 +224,7 @@ public class TelaDeConfig extends JFrame {
                     frutasNoChao.put("goiaba", Integer.parseInt(goiabaField.getText()));
 
                     Map<String, Integer> arvoresPorFruta = new HashMap<>();
+                    arvoresPorFruta.put("maracuja", Integer.parseInt(maracujaField.getText()));
                     arvoresPorFruta.put("laranja", Integer.parseInt(arvoresLaranjaField.getText()));
                     arvoresPorFruta.put("abacate", Integer.parseInt(arvoresAbacateField.getText()));
                     arvoresPorFruta.put("coco", Integer.parseInt(arvoresCocoField.getText()));
@@ -245,6 +252,7 @@ public class TelaDeConfig extends JFrame {
 
     private void inicializarJogo(Configuracao config)  {
         JFrame frame = new JFrame("Cata-frutas");
+        Recursos.getInstancia().setConfig(config);
         Floresta f = new Floresta();
         Jogo jogo = new Jogo(f, config, frame);
         f.gerar(config);

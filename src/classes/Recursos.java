@@ -17,6 +17,7 @@ public class Recursos {
     private Map<String, Image> cacheImagens;
 
     private Floresta floresta;
+    private Configuracao config;
 
     /**
      * O numero de turnos que deve passar antes de uma arvore drope uma fruta nova
@@ -72,4 +73,16 @@ public class Recursos {
      * @return A instância da floresta.
      */
     public Floresta getFloresta() { return floresta; }
+
+    /**
+     * Define a configuração usada globalmente.
+     * @param config A configuração a ser usada
+     */
+    public void setConfig(Configuracao config) {this.config = config;}
+
+    /**
+     * Obtem a instancia da configuração usada.
+     * @return A configuração usada.
+     */
+    public Configuracao getConfig() { return config; }
 }

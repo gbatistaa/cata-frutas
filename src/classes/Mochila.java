@@ -28,6 +28,8 @@ public class Mochila {
      * @return true se a fruta foi adicionada com sucesso, false se a mochila estiver cheia.
      */
     public boolean adicionarFruta(Fruta fruta) {
+        if(fruta.isBichada())
+            System.out.println("BICHADAAAAAAAA");
         if (frutas.size() < capacidade) {
             frutas.add(fruta);
             return true;
