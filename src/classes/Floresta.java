@@ -42,6 +42,10 @@ public class Floresta {
      */
     public void setEntidade(int x, int y, Entidade entidade) {
         mapa[x][y] = entidade;
+        if(entidade != null) {
+            entidade.setX(x);
+            entidade.setY(y);
+        }
     }
 
     /**
@@ -88,7 +92,7 @@ public class Floresta {
             int x = (int) (Math.random() * dimensao);
             int y = (int) (Math.random() * dimensao);
             if (mapa[x][y] == null)
-                mapa[x][y] = new Pedra();
+                setEntidade(x, y, new Pedra());
         }
     }
 
@@ -97,7 +101,7 @@ public class Floresta {
             int x = (int) (Math.random() * dimensao);
             int y = (int) (Math.random() * dimensao);
             if(mapa[x][y] == null) {
-                mapa[x][y] = new Arvore(Fruta.PorNome(tipoFruta));
+                setEntidade(x, y, new Arvore(Fruta.PorNome(tipoFruta)));
 
             }
         }
@@ -108,7 +112,7 @@ public class Floresta {
             int x = (int) (Math.random() * dimensao);
             int y = (int) (Math.random() * dimensao);
             if (mapa[x][y] == null)
-                mapa[x][y] = Fruta.PorNome(tipoFruta);
+                setEntidade(x, y, Fruta.PorNome(tipoFruta));
         }
     }
     @Override

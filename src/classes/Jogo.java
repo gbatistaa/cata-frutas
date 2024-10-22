@@ -4,15 +4,12 @@
 package classes;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.List;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.File;
 import java.io.PrintStream;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.Random;
 
 import javax.swing.*;
 /**
@@ -26,6 +23,9 @@ public class Jogo extends JPanel {
     private int movimentos = 0;
     private Boolean turnoJogadorUm = true;
     private Direcao ultimoMov;
+    int turno = 1;
+    int numMaracujasInvocados;
+    int vencedorId = 1;
 
     
 
@@ -54,6 +54,7 @@ public class Jogo extends JPanel {
         dois.setMochila(new Mochila(config.getCapacidadeMochila()));
 
         this.flo = floresta;
+        numMaracujasInvocados = config.getNumFrutasNoChaoPorNome("maracuja");
         Recursos.getInstancia().setFloresta(flo);
         // Configura o foco para o painel
         setFocusable(true);
@@ -64,11 +65,16 @@ public class Jogo extends JPanel {
             public void keyPressed(KeyEvent e) {
                 int keyCode = e.getKeyCode();
                 Jogador movedor = turnoJogadorUm ? um : dois;
+
+
                 if (movedor.isDoente()) {
 					movimentos = 0;
 					movedor.setDoente(false);
 				}
                 switch (keyCode) {
+                    case KeyEvent.VK_M:
+                        vencedorId = 1;
+                        break;
                     case KeyEvent.VK_UP:
                         AoMover(movedor, Direcao.CIMA);
                         break;
@@ -114,6 +120,8 @@ public class Jogo extends JPanel {
                 System.out.println("MOVIMENTOS: " + movimentos);
 
                 if(movimentos <= 0) {
+
+
                     if(flo.getEntidade(movedor.getX(), movedor.getY()) instanceof Arvore) {
                         Fruta f = ((Arvore) flo.getEntidade(movedor.getX(), movedor.getY())).TryDropFruta();
                         if(f != null)
@@ -134,10 +142,20 @@ public class Jogo extends JPanel {
                     System.out.println("MOVIMENTOS: " + movimentos);
                     if (turnoJogadorUm) {
 						System.out.println("Jogador vermelho joga.\n" + um);
+                        turno++;
 					} else {
 						System.out.println("Jogador azul joga.\n" + dois);
-
 					}
+                    if(turno % 2 == 0)
+                        invocarMaracuja();
+
+                    int maxPontos = config.getTotalDeFrutaPorNome("maracuja") / 2;
+                    if(um.getPontosVitoria() > maxPontos) {
+                        vencedorId = 1;
+                    }
+                    if(dois.getPontosVitoria() > maxPontos) {
+                        vencedorId = 2;
+                    }
                 }
             }
             
@@ -159,7 +177,7 @@ public class Jogo extends JPanel {
      *
      * @param config A configuração do jogo, incluindo dimensões do tabuleiro.
      */
-    void render( Floresta floresta , Configuracao config  ) {
+    void render(Floresta floresta, Configuracao config) {
         // Define o layout principal como BorderLayout
         setLayout(new BorderLayout());
 
@@ -171,12 +189,12 @@ public class Jogo extends JPanel {
             for (int x = 0; x < config.getDimensao(); x++) {
                 int finalY = y;
                 int finalX = x;
-                
+
                 JPanel quadrado = new JPanel() {
                     @Override
                     protected void paintComponent(Graphics g) {
                         super.paintComponent(g);
-                        
+
                         // Desenha a grama
                         Image backgroundImage = Recursos.getInstancia().carregarImagem("assets/grama2.png");
                         g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this); // Desenha a imagem de fundo
@@ -208,7 +226,6 @@ public class Jogo extends JPanel {
         add(tabuleiro, BorderLayout.CENTER);
 
         // Painel de mensagens e escolha de frutas (à direita)
-        // Painel de mensagens e escolha de frutas (à direita)
         JPanel painelLateral = new JPanel(new BorderLayout());
         painelLateral.setPreferredSize(new Dimension(200, getHeight())); // Definir uma largura preferida para o painel lateral
 
@@ -219,22 +236,28 @@ public class Jogo extends JPanel {
         JScrollPane scrollMensagens = new JScrollPane(areaMensagens);
         painelLateral.add(scrollMensagens, BorderLayout.CENTER);
 
-
-
-
-
-
-
         // Adiciona o painel lateral ao lado direito
-        add(painelLateral, BorderLayout.EAST);     
+        add(painelLateral, BorderLayout.EAST);
 
-        
-
-     // Redireciona a saída do console para o JTextArea
+        // Redireciona a saída do console para o JTextArea
         PrintStream printStream = new PrintStream(new CustomOutputStream(areaMensagens));
         System.setOut(printStream); // Redireciona o System.out para o JTextArea
         System.setErr(printStream); // Redireciona o System.err para o JTextArea (caso necessário)
         setLocation(new Point(0, 0)); // Centraliza a janela
+
+        // Verifica se há um vencedor
+        if (vencedorId > 0) {
+            System.out.println("VENCEDOR DECLARADO");
+            // Exibe um popup informando quem ganhou
+            String mensagemVencedor = "O jogador " + vencedorId + " venceu!";
+            int resposta = JOptionPane.showConfirmDialog(this, mensagemVencedor, "Fim de Jogo", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
+
+            // Se o botão "OK" for pressionado, retorna à tela de configuração
+            if (resposta == JOptionPane.OK_OPTION) {
+                // Aqui você pode chamar o método que retorna à tela de configuração
+                TelaDeConfig.exibir();
+            }
+        }
     }
 
  // 
@@ -313,6 +336,62 @@ public class Jogo extends JPanel {
             jogador.setY(prevY);
         }
     }
+
+    public void invocarMaracuja() {
+        if(numMaracujasInvocados > config.getTotalDeFrutaPorNome("maracuja")) {
+            System.out.println("Ja foram invocados todos os maracujas");
+            return;
+        }
+        Random random = new Random();
+        List<Arvore> arvores = new ArrayList<>();
+
+        // Coletar todas as árvores
+        for (int y = 0; y < config.getDimensao(); y++) {
+            for (int x = 0; x < config.getDimensao(); x++) {
+                if (flo.getEntidade(x, y) instanceof Arvore) {
+                    arvores.add((Arvore) flo.getEntidade(x, y));
+                }
+            }
+        }
+
+        // Enquanto houver árvores disponíveis
+        while ( !arvores.isEmpty()) {
+            int indexArvore = random.nextInt(arvores.size());
+            Arvore arvore = arvores.get(indexArvore);
+            arvores.remove(indexArvore);
+
+            // Definir direções possíveis
+            ArrayList<int[]> direcoes = new ArrayList<>();
+            direcoes.add(new int[]{1, 0});  // Direção para a direita
+            direcoes.add(new int[]{-1, 0}); // Direção para a esquerda
+            direcoes.add(new int[]{0, 1});  // Direção para baixo
+            direcoes.add(new int[]{0, -1}); // Direção para cima
+
+            // Enquanto houver direções disponíveis
+            while (!direcoes.isEmpty()) {
+                int index = random.nextInt(direcoes.size());
+                int[] direcaoAleatoria = direcoes.get(index);
+                direcoes.remove(index);
+
+                // Verificar se a posição está vazia
+                int novaPosX = arvore.getX() + direcaoAleatoria[0];
+                int novaPosY = arvore.getY() + direcaoAleatoria[1];
+
+                if(novaPosX < 0 || novaPosX >= config.getDimensao() || novaPosY < 0 || novaPosY >= config.getDimensao()) {
+                    continue;
+                }
+
+                if (flo.getEntidade(novaPosX, novaPosY) == null) {
+                    Maracuja maracuja = new Maracuja();
+                    flo.setEntidade(novaPosX, novaPosY, maracuja);
+                    System.out.println("MARACUJA INVOCADO EM X:" + novaPosX + ",Y:" + novaPosY);
+                    return; // Saia após instanciar o Maracujá
+                }
+            }
+        }
+        System.out.println("Não foi possível instanciar maracuja");
+    }
+
 
 
 

@@ -256,4 +256,11 @@ public class TelaDeConfig extends JFrame {
         frame.setVisible(true);
         jogo.render(f, config);
     }
+
+    public static void exibir() {
+        SwingUtilities.invokeLater(() -> {
+            TelaDeConfig telaConfig = new TelaDeConfig();
+            telaConfig.setVisible(true);
+        });
+    }
 }

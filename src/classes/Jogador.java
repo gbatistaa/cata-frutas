@@ -10,7 +10,6 @@ import java.util.Random;
 public class Jogador extends Entidade {
     private Mochila mochila;
     private Color color;
-    private int pontosVitoria = 0;
     private int multiplicadorPoder = 1;
     private boolean doente = false;
 
@@ -30,21 +29,16 @@ public class Jogador extends Entidade {
         this.mochila = mochila;
     }
 
-    public int getPontosVitoria(Mochila mochila) {
+    public int getPontosVitoria() {
     	 List<Fruta> frutasNaMochila = mochila.getFrutas(); 
-         Fruta maracuja = null; 
+         int pontosVitoria = 0;
          for (Fruta fruta : frutasNaMochila) {
-         	if (fruta.getClass().getSimpleName().equals("Maracuja")) {
+         	if (fruta instanceof Maracuja) {
  				pontosVitoria++;
  			}        	
          }
          return pontosVitoria;
 
- 		}
-    
-
-    public void setPontosVitoria(int pontosVitoria) {
-        this.pontosVitoria = pontosVitoria;
     }
 
     public Color getColor() { return color; }
