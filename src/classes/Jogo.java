@@ -17,6 +17,9 @@ import javax.swing.*;
  */
 public class Jogo extends JPanel {
     private JFrame parent;
+    private JLabel labelTurno;
+    private JLabel labelMovimentos;
+    private JPanel painelInventario;
     private Jogador um, dois;
     private boolean ativo = false;
     private Configuracao config;
@@ -26,7 +29,7 @@ public class Jogo extends JPanel {
     private Direcao ultimoMov;
     int turno = 1;
     int numMaracujasInvocados;
-    int vencedorId = 1;
+    int vencedorId = 0;
 
     
 
@@ -68,6 +71,7 @@ public class Jogo extends JPanel {
                 int keyCode = e.getKeyCode();
                 Jogador movedor = turnoJogadorUm ? um : dois;
 
+                labelMovimentos.setText("Movimentos restantes: " + movimentos);
 
                 if (movedor.isDoente()) {
 					movimentos = 0;
@@ -94,6 +98,7 @@ public class Jogo extends JPanel {
                         if(noLocal instanceof Fruta) {
                             movedor.coletar((Fruta) noLocal , floresta);
                             flo.setEntidade(movedor.getX(), movedor.getY(), null);
+                            atualizarInventario();
                         }
                         break;
                     case KeyEvent.VK_Q:
@@ -123,6 +128,7 @@ public class Jogo extends JPanel {
 
                 if(movimentos <= 0) {
 
+                    labelTurno.setText(turnoJogadorUm ? "Turno: Jogador 1" : "Turno: Jogador 2");
 
                     if(flo.getEntidade(movedor.getX(), movedor.getY()) instanceof Arvore) {
                         Fruta f = ((Arvore) flo.getEntidade(movedor.getX(), movedor.getY())).TryDropFruta();
@@ -140,6 +146,7 @@ public class Jogo extends JPanel {
                     }
 
                     movimentos = (int) (Math.random() * 12);
+                    labelMovimentos.setText("Movimentos restantes: " + movimentos);
                     System.out.println("\n\nTROCA DE TURNO");
                     System.out.println("MOVIMENTOS: " + movimentos);
                     if (turnoJogadorUm) {
@@ -157,6 +164,20 @@ public class Jogo extends JPanel {
                     }
                     if(dois.getPontosVitoria() > maxPontos) {
                         vencedorId = 2;
+                    }
+                    atualizarInventario();
+                    if (vencedorId > 0) {
+                        System.out.println("VENCEDOR DECLARADO");
+                        // Exibe um popup informando quem ganhou
+                        String mensagemVencedor = "O jogador " + vencedorId + " venceu!";
+                        int resposta = JOptionPane.showConfirmDialog(parent, mensagemVencedor, "Fim de Jogo", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
+
+                        // Se o botão "OK" for pressionado, retorna à tela de configuração
+                        if (resposta == JOptionPane.OK_OPTION) {
+                            // Aqui você pode chamar o método que retorna à tela de configuração
+                            TelaDeConfig.exibir();
+                            parent.dispose();
+                        }
                     }
                 }
             }
@@ -224,19 +245,38 @@ public class Jogo extends JPanel {
             }
         }
 
-        // Adiciona o tabuleiro ao lado esquerdo
+        // Adiciona o tabuleiro ao centro
         add(tabuleiro, BorderLayout.CENTER);
 
         // Painel de mensagens e escolha de frutas (à direita)
         JPanel painelLateral = new JPanel(new BorderLayout());
-        painelLateral.setPreferredSize(new Dimension(200, getHeight())); // Definir uma largura preferida para o painel lateral
+        painelLateral.setPreferredSize(new Dimension(200, 300)); // Definir uma largura preferida para o painel lateral
 
+        // Painel para exibir o turno e número de movimentos restantes
+        JPanel painelInfoTurno = new JPanel();
+        painelInfoTurno.setLayout(new BoxLayout(painelInfoTurno, BoxLayout.Y_AXIS)); // Layout vertical
+        labelTurno = new JLabel("Turno: Jogador 1"); // Mensagem inicial
+        labelMovimentos = new JLabel("Movimentos restantes: 5"); // Mensagem inicial
+
+        painelInventario = new JPanel();
+        painelInventario.setLayout(new GridLayout(0, 1)); // Layout para listar as frutas
+
+        atualizarInventario();
+
+        painelInfoTurno.add(labelTurno); // Adiciona o label do turno
+        painelInfoTurno.add(labelMovimentos); // Adiciona o label de movimentos restantes
+
+        // Área de mensagens
         JTextArea areaMensagens = new JTextArea();
         areaMensagens.setEditable(false); // Não permitir que o jogador edite as mensagens
         areaMensagens.setFocusable(false); // Impedir que a área de texto receba foco e eventos de clique
 
         JScrollPane scrollMensagens = new JScrollPane(areaMensagens);
-        painelLateral.add(scrollMensagens, BorderLayout.CENTER);
+        scrollMensagens.setPreferredSize(new Dimension(200, 100)); // Define uma altura preferida para a área de mensagens
+
+        painelLateral.add(painelInfoTurno, BorderLayout.NORTH); // Adiciona o painel de informação no topo
+        painelLateral.add(scrollMensagens, BorderLayout.SOUTH); // Adiciona a área de mensagens
+        painelLateral.add(painelInventario, BorderLayout.CENTER); // Adiciona o painel de inventário
 
         // Adiciona o painel lateral ao lado direito
         add(painelLateral, BorderLayout.EAST);
@@ -245,25 +285,12 @@ public class Jogo extends JPanel {
         PrintStream printStream = new PrintStream(new CustomOutputStream(areaMensagens));
         System.setOut(printStream); // Redireciona o System.out para o JTextArea
         System.setErr(printStream); // Redireciona o System.err para o JTextArea (caso necessário)
-        setLocation(new Point(0, 0)); // Centraliza a janela
 
-        // Verifica se há um vencedor
-        if (vencedorId > 0) {
-            System.out.println("VENCEDOR DECLARADO");
-            // Exibe um popup informando quem ganhou
-            String mensagemVencedor = "O jogador " + vencedorId + " venceu!";
-            int resposta = JOptionPane.showConfirmDialog(this, mensagemVencedor, "Fim de Jogo", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
-
-            // Se o botão "OK" for pressionado, retorna à tela de configuração
-            if (resposta == JOptionPane.OK_OPTION) {
-                // Aqui você pode chamar o método que retorna à tela de configuração
-                TelaDeConfig.exibir();
-                parent.dispose();
-            }
-        }
     }
 
- // 
+
+
+    //
     /**
      * Retorna a imagem da entidade na posição especificada.
      *
@@ -393,6 +420,31 @@ public class Jogo extends JPanel {
             }
         }
         System.out.println("Não foi possível instanciar maracuja");
+    }
+
+    private void atualizarInventario() {
+        painelInventario.removeAll(); // Limpa o painel de inventário antes de atualizar
+        List<Fruta> frutas = (turnoJogadorUm ? um : dois).getMochila().getFrutas();
+
+        for (Fruta fruta : frutas) {
+            JLabel labelFruta = new JLabel(fruta.getClass().getSimpleName()); // Assume que Fruta tem um método getNome()
+            labelFruta.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)); // Cursor de mão ao passar o mouse
+
+            // Adiciona um MouseListener para consumir a fruta ao clicar
+            labelFruta.addMouseListener(new java.awt.event.MouseAdapter() {
+                @Override
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    ((turnoJogadorUm ? um : dois).getMochila()).consumirFruta(fruta);
+                    atualizarInventario(); // Atualiza o inventário após consumir a fruta
+                    System.out.println("Consumiu a fruta: " + fruta.getClass().getSimpleName());
+                }
+            });
+
+            painelInventario.add(labelFruta); // Adiciona a label da fruta ao painel de inventário
+        }
+
+        painelInventario.revalidate(); // Atualiza a interface
+        painelInventario.repaint(); // Repaint para mostrar as alterações
     }
 
 

@@ -67,6 +67,12 @@ public class Mochila {
         return frutas;
     }
 
+    public void consumirFruta(Fruta fruta) {
+        if(frutas.contains(fruta)) {
+            frutas.remove(fruta);
+        }
+    }
+
     /**
      * Remove uma fruta aleatória da mochila.
      *

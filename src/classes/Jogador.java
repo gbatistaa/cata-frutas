@@ -202,6 +202,7 @@ public class Jogador extends Entidade {
 
         // Adiciona a posição do jogador=
         sb.append("Posição: (").append(getX()).append(", ").append(getY()).append(")\n");
+        sb.append("Pontos:").append(getPontosVitoria()).append("\n");
 
         // Adiciona a lista de frutas na mochila
         List<Fruta> frutasNaMochila = mochila.getFrutas(); // Supondo que exista um método getFrutas() em Mochila
