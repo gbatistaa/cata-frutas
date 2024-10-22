@@ -88,6 +88,9 @@ public class Jogo extends JPanel {
                             flo.setEntidade(movedor.getX(), movedor.getY(), null);
                         }
                         break;
+                    case KeyEvent.VK_Q:
+                        movimentos = 0;
+                        break;
                     case KeyEvent.VK_1:
                     	int res = movedor.consumirCoco(movedor.getMochila(), config);
                         if (res == 0 ) {
@@ -111,7 +114,21 @@ public class Jogo extends JPanel {
                 System.out.println("MOVIMENTOS: " + movimentos);
 
                 if(movimentos <= 0) {
+                    if(flo.getEntidade(movedor.getX(), movedor.getY()) instanceof Arvore) {
+                        Fruta f = ((Arvore) flo.getEntidade(movedor.getX(), movedor.getY())).TryDropFruta();
+                        if(f != null)
+                            movedor.coletar(f);
+                    }
                     turnoJogadorUm = !turnoJogadorUm;
+
+                    for(int y = 0; y < config.getDimensao(); y++) {
+                        for (int x = 0; x < config.getDimensao(); x++) {
+                            if (flo.getEntidade(x, y) instanceof Arvore) {
+                                ((Arvore) flo.getEntidade(x, y)).passarTurno();
+                            }
+                        }
+                    }
+
                     movimentos = (int) (Math.random() * 12);
                     System.out.println("\n\nTROCA DE TURNO");
                     System.out.println("MOVIMENTOS: " + movimentos);
@@ -121,7 +138,6 @@ public class Jogo extends JPanel {
 						System.out.println("Jogador azul joga.\n" + dois);
 
 					}
-                   // System.out.println(turnoJogadorUm ? um : dois);
                 }
             }
             
@@ -192,18 +208,21 @@ public class Jogo extends JPanel {
         add(tabuleiro, BorderLayout.CENTER);
 
         // Painel de mensagens e escolha de frutas (à direita)
+        // Painel de mensagens e escolha de frutas (à direita)
         JPanel painelLateral = new JPanel(new BorderLayout());
         painelLateral.setPreferredSize(new Dimension(200, getHeight())); // Definir uma largura preferida para o painel lateral
 
-        // Área de texto para exibir mensagens do jogo
         JTextArea areaMensagens = new JTextArea();
         areaMensagens.setEditable(false); // Não permitir que o jogador edite as mensagens
-        JScrollPane scrollMensagens = new JScrollPane(areaMensagens);
-        painelLateral.add(scrollMensagens, BorderLayout.CENTER);    
-    
+        areaMensagens.setFocusable(false); // Impedir que a área de texto receba foco e eventos de clique
 
-    
-        
+        JScrollPane scrollMensagens = new JScrollPane(areaMensagens);
+        painelLateral.add(scrollMensagens, BorderLayout.CENTER);
+
+
+
+
+
 
 
         // Adiciona o painel lateral ao lado direito

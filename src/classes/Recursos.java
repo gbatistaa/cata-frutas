@@ -18,6 +18,8 @@ public class Recursos {
 
     private Floresta floresta;
 
+    public final int DelayTurnosDropArvore = 5;
+
     /**
      * Construtor privado para evitar instâncias fora da classe.
      * Inicializa o cache de imagens.

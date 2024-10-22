@@ -54,13 +54,19 @@ public class Jogador extends Entidade {
      *
      * @param fruta A fruta a ser coletada.
      */
+    public void coletar(Fruta fruta) {
+        if (mochila.adicionarFruta(fruta)) {
+            fruta.aoColetar(this);
+            System.out.println("Coletou " + fruta.getClass().getSimpleName());
+        }
+    }
     public void coletar(Fruta fruta , Floresta flo) {
         if (mochila.adicionarFruta(fruta)) {
             fruta.aoColetar(this);
         }
-       
-		
     }
+
+
 
     /**
      * Empurra outro jogador.
