@@ -65,134 +65,7 @@ public class Jogo extends JPanel {
         setFocusable(true);
 
         // Adiciona o KeyListener com uma classe interna anônima
-        addKeyListener(new KeyListener() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                int keyCode = e.getKeyCode();
-                Jogador movedor = turnoJogadorUm ? um : dois;
-
-                labelMovimentos.setText("Movimentos restantes: " + movimentos);
-
-                if (movedor.isDoente()) {
-					movimentos = 0;
-					movedor.setDoente(false);
-				}
-                switch (keyCode) {
-                    case KeyEvent.VK_M:
-                        vencedorId = 1;
-                        break;
-                    case KeyEvent.VK_UP:
-                        AoMover(movedor, Direcao.CIMA);
-                        break;
-                    case KeyEvent.VK_DOWN:
-                        AoMover(movedor, Direcao.BAIXO);
-                        break;
-                    case KeyEvent.VK_LEFT:
-                        AoMover(movedor, Direcao.ESQUERDA);
-                        break;
-                    case KeyEvent.VK_RIGHT:
-                        AoMover(movedor, Direcao.DIREITA);
-                        break;
-                    case KeyEvent.VK_ENTER:
-                        Entidade noLocal = flo.getEntidade(movedor.getX(), movedor.getY());
-                        if(noLocal instanceof Fruta) {
-                            movedor.coletar((Fruta) noLocal , floresta);
-                            flo.setEntidade(movedor.getX(), movedor.getY(), null);
-                            atualizarInventario();
-                        }
-                        break;
-                    case KeyEvent.VK_Q:
-                        movimentos = 0;
-                        break;
-                    case KeyEvent.VK_1:
-                    	int res = movedor.consumirCoco(movedor.getMochila(), config);
-                        if (res == 0 ) {
-                            movimentos *= 2;
-                            System.out.println("MOVIMENTOS: " + movimentos);
-                        }
-                        break;
-                    case KeyEvent.VK_2:
-                        movedor.consumirAbacate(movedor.getMochila(), config);
-                        break;
-                    case KeyEvent.VK_3:
-                        movedor.consumirLaranja(movedor.getMochila(), config);
-                        break;
-                    
-                    default:
-                        System.out.println("Você digitou um número que não corresponde a uma fruta");
-                        break;
-                }
-                // Atualiza o desenho na tela
-                repaint();
-                System.out.println("MOVIMENTOS: " + movimentos);
-
-                if(movimentos <= 0) {
-
-                    labelTurno.setText(turnoJogadorUm ? "Turno: Jogador 1" : "Turno: Jogador 2");
-
-                    if(flo.getEntidade(movedor.getX(), movedor.getY()) instanceof Arvore) {
-                        Fruta f = ((Arvore) flo.getEntidade(movedor.getX(), movedor.getY())).TryDropFruta();
-                        if(f != null)
-                            movedor.coletar(f);
-                    }
-                    turnoJogadorUm = !turnoJogadorUm;
-
-                    for(int y = 0; y < config.getDimensao(); y++) {
-                        for (int x = 0; x < config.getDimensao(); x++) {
-                            if (flo.getEntidade(x, y) instanceof Arvore) {
-                                ((Arvore) flo.getEntidade(x, y)).passarTurno();
-                            }
-                        }
-                    }
-
-                    movimentos = (int) (Math.random() * 12);
-                    labelMovimentos.setText("Movimentos restantes: " + movimentos);
-                    System.out.println("\n\nTROCA DE TURNO");
-                    System.out.println("MOVIMENTOS: " + movimentos);
-                    if (turnoJogadorUm) {
-						System.out.println("Jogador vermelho joga.\n" + um);
-                        turno++;
-					} else {
-						System.out.println("Jogador azul joga.\n" + dois);
-					}
-                    if(turno % 2 == 0)
-                        invocarMaracuja();
-
-                    int maxPontos = config.getTotalDeFrutaPorNome("maracuja") / 2;
-                    if(um.getPontosVitoria() > maxPontos) {
-                        vencedorId = 1;
-                    }
-                    if(dois.getPontosVitoria() > maxPontos) {
-                        vencedorId = 2;
-                    }
-                    atualizarInventario();
-                    if (vencedorId > 0) {
-                        System.out.println("VENCEDOR DECLARADO");
-                        // Exibe um popup informando quem ganhou
-                        String mensagemVencedor = "O jogador " + vencedorId + " venceu!";
-                        int resposta = JOptionPane.showConfirmDialog(parent, mensagemVencedor, "Fim de Jogo", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
-
-                        // Se o botão "OK" for pressionado, retorna à tela de configuração
-                        if (resposta == JOptionPane.OK_OPTION) {
-                            // Aqui você pode chamar o método que retorna à tela de configuração
-                            TelaDeConfig.exibir();
-                            parent.dispose();
-                        }
-                    }
-                }
-            }
-            
-            @Override
-            public void keyReleased(KeyEvent e) {
-                // Não implementado
-            }
-
-            @Override
-            public void keyTyped(KeyEvent e) {
-                // Não implementado
-            }
-        });
-        
+        addKeyListener(criarKeyListener());
     }
 
     /**
@@ -367,6 +240,15 @@ public class Jogo extends JPanel {
         }
     }
 
+    /**
+     * Invoca um Maracujá em uma posição aleatória ao redor das árvores disponíveis no mapa.
+     *
+     * Verifica se o número de Maracujás invocados não excede o total permitido.
+     * Coleta todas as árvores e tenta invocar um Maracujá em posições adjacentes
+     * (cima, baixo, esquerda ou direita). Se uma posição estiver vazia,
+     * o Maracujá é instanciado e sua localização é impressa.
+     * Se não for possível invocar um Maracujá, uma mensagem é exibida.
+     */
     public void invocarMaracuja() {
         if(numMaracujasInvocados > config.getTotalDeFrutaPorNome("maracuja")) {
             System.out.println("Ja foram invocados todos os maracujas");
@@ -421,7 +303,12 @@ public class Jogo extends JPanel {
         }
         System.out.println("Não foi possível instanciar maracuja");
     }
-
+    /**
+     * Atualiza o painel de inventário, exibindo as frutas disponíveis
+     * na mochila do jogador atual. Limpa o painel antes de adicionar
+     * as frutas. Cada fruta é representada por um JLabel que, ao ser
+     * clicado, consome a fruta correspondente e atualiza a interface.
+     */
     private void atualizarInventario() {
         painelInventario.removeAll(); // Limpa o painel de inventário antes de atualizar
         List<Fruta> frutas = (turnoJogadorUm ? um : dois).getMochila().getFrutas();
@@ -447,6 +334,140 @@ public class Jogo extends JPanel {
         painelInventario.repaint(); // Repaint para mostrar as alterações
     }
 
+    /**
+     * Cria um {@link KeyListener} para gerenciar a entrada de teclado do jogador.
+     *
+     * @return O {@link KeyListener} configurado.
+     */
+    public KeyListener criarKeyListener() {
+        return new KeyListener() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                int keyCode = e.getKeyCode();
+                Jogador movedor = turnoJogadorUm ? um : dois;
+
+                labelMovimentos.setText("Movimentos restantes: " + movimentos);
+
+                if (movedor.isDoente()) {
+                    movimentos = 0;
+                    movedor.setDoente(false);
+                }
+                switch (keyCode) {
+                    case KeyEvent.VK_M:
+                        vencedorId = 1;
+                        break;
+                    case KeyEvent.VK_UP:
+                        AoMover(movedor, Direcao.CIMA);
+                        break;
+                    case KeyEvent.VK_DOWN:
+                        AoMover(movedor, Direcao.BAIXO);
+                        break;
+                    case KeyEvent.VK_LEFT:
+                        AoMover(movedor, Direcao.ESQUERDA);
+                        break;
+                    case KeyEvent.VK_RIGHT:
+                        AoMover(movedor, Direcao.DIREITA);
+                        break;
+                    case KeyEvent.VK_ENTER:
+                        Entidade noLocal = flo.getEntidade(movedor.getX(), movedor.getY());
+                        if(noLocal instanceof Fruta) {
+                            movedor.coletar((Fruta) noLocal , flo);
+                            flo.setEntidade(movedor.getX(), movedor.getY(), null);
+                            atualizarInventario();
+                        }
+                        break;
+                    case KeyEvent.VK_Q:
+                        movimentos = 0;
+                        break;
+                    case KeyEvent.VK_1:
+                        int res = movedor.consumirCoco(movedor.getMochila(), config);
+                        if (res == 0 ) {
+                            movimentos *= 2;
+                            System.out.println("MOVIMENTOS: " + movimentos);
+                        }
+                        break;
+                    case KeyEvent.VK_2:
+                        movedor.consumirAbacate(movedor.getMochila(), config);
+                        break;
+                    case KeyEvent.VK_3:
+                        movedor.consumirLaranja(movedor.getMochila(), config);
+                        break;
+
+                    default:
+                        System.out.println("Você digitou um número que não corresponde a uma fruta");
+                        break;
+                }
+                // Atualiza o desenho na tela
+                repaint();
+                System.out.println("MOVIMENTOS: " + movimentos);
+
+                if(movimentos <= 0) {
+
+                    labelTurno.setText(turnoJogadorUm ? "Turno: Jogador 1" : "Turno: Jogador 2");
+
+                    if(flo.getEntidade(movedor.getX(), movedor.getY()) instanceof Arvore) {
+                        Fruta f = ((Arvore) flo.getEntidade(movedor.getX(), movedor.getY())).TryDropFruta();
+                        if(f != null)
+                            movedor.coletar(f);
+                    }
+                    turnoJogadorUm = !turnoJogadorUm;
+
+                    for(int y = 0; y < config.getDimensao(); y++) {
+                        for (int x = 0; x < config.getDimensao(); x++) {
+                            if (flo.getEntidade(x, y) instanceof Arvore) {
+                                ((Arvore) flo.getEntidade(x, y)).passarTurno();
+                            }
+                        }
+                    }
+
+                    movimentos = (int) (Math.random() * 12);
+                    labelMovimentos.setText("Movimentos restantes: " + movimentos);
+                    System.out.println("\n\nTROCA DE TURNO");
+                    System.out.println("MOVIMENTOS: " + movimentos);
+                    if (turnoJogadorUm) {
+                        System.out.println("Jogador vermelho joga.\n" + um);
+                        turno++;
+                    } else {
+                        System.out.println("Jogador azul joga.\n" + dois);
+                    }
+                    if(turno % 2 == 0)
+                        invocarMaracuja();
+
+                    int maxPontos = config.getTotalDeFrutaPorNome("maracuja") / 2;
+                    if(um.getPontosVitoria() > maxPontos) {
+                        vencedorId = 1;
+                    }
+                    if(dois.getPontosVitoria() > maxPontos) {
+                        vencedorId = 2;
+                    }
+                    atualizarInventario();
+                    if (vencedorId > 0) {
+                        System.out.println("VENCEDOR DECLARADO");
+                        // Exibe um popup informando quem ganhou
+                        String mensagemVencedor = "O jogador " + vencedorId + " venceu!";
+                        int resposta = JOptionPane.showConfirmDialog(parent, mensagemVencedor, "Fim de Jogo", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
+
+                        // Se o botão "OK" for pressionado, retorna à tela de configuração
+                        if (resposta == JOptionPane.OK_OPTION) {
+                            // Aqui você pode chamar o método que retorna à tela de configuração
+                            TelaDeConfig.exibir();
+                            parent.dispose();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                // Não implementado
+            }
+
+            @Override
+            public void keyTyped(KeyEvent e) {
+                // Não implementado
+            }
+        };
+    }
 
 
 

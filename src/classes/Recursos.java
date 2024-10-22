@@ -18,8 +18,10 @@ public class Recursos {
 
     private Floresta floresta;
 
+    /**
+     * O numero de turnos que deve passar antes de uma arvore drope uma fruta nova
+     */
     public static final int DelayTurnosDropArvore = 5;
-    public static final float AspectRatio = 1100/900;
 
     /**
      * Construtor privado para evitar instâncias fora da classe.

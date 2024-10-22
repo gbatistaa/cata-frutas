@@ -1,5 +1,6 @@
 /**
  * A classe Jogador representa um jogador no jogo, que pode coletar frutas e interagir com outros jogadores.
+ * Cada jogador possui uma mochila, que armazena as frutas coletadas, e pode empurrar outros jogadores.
  */
 package classes;
 
@@ -13,35 +14,72 @@ public class Jogador extends Entidade {
     private int multiplicadorPoder = 1;
     private boolean doente = false;
 
-	public Jogador(int x, int y, Color color) {
+    /**
+     * Cria um novo jogador na posição especificada com a cor fornecida.
+     *
+     * @param x    A coordenada x do jogador.
+     * @param y    A coordenada y do jogador.
+     * @param color A cor do jogador.
+     */
+    public Jogador(int x, int y, Color color) {
         setX(x);
         setY(y);
         this.color = color;
     }
 
-    public int getPoder() { return mochila.getQuantidadeFrutas() * multiplicadorPoder; }
+    /**
+     * Obtém o poder do jogador, calculado com base na quantidade de frutas na mochila
+     * multiplicada pelo multiplicador de poder.
+     *
+     * @return O poder do jogador.
+     */
+    public int getPoder() {
+        return mochila.getQuantidadeFrutas() * multiplicadorPoder;
+    }
 
+    /**
+     * Obtém a mochila do jogador.
+     *
+     * @return A mochila do jogador.
+     */
     public Mochila getMochila() {
         return mochila;
     }
 
+    /**
+     * Define a mochila do jogador.
+     *
+     * @param mochila A mochila a ser definida.
+     */
     public void setMochila(Mochila mochila) {
         this.mochila = mochila;
     }
 
+    /**
+     * Obtém os pontos de vitória do jogador, calculando a quantidade de frutas do tipo
+     * Maracuja na mochila.
+     *
+     * @return Os pontos de vitória do jogador.
+     */
     public int getPontosVitoria() {
-    	 List<Fruta> frutasNaMochila = mochila.getFrutas(); 
-         int pontosVitoria = 0;
-         for (Fruta fruta : frutasNaMochila) {
-         	if (fruta instanceof Maracuja) {
- 				pontosVitoria++;
- 			}        	
-         }
-         return pontosVitoria;
-
+        List<Fruta> frutasNaMochila = mochila.getFrutas();
+        int pontosVitoria = 0;
+        for (Fruta fruta : frutasNaMochila) {
+            if (fruta instanceof Maracuja) {
+                pontosVitoria++;
+            }
+        }
+        return pontosVitoria;
     }
 
-    public Color getColor() { return color; }
+    /**
+     * Obtém a cor do jogador.
+     *
+     * @return A cor do jogador.
+     */
+    public Color getColor() {
+        return color;
+    }
 
     /**
      * Coleta uma fruta e a adiciona à mochila do jogador.
@@ -54,16 +92,22 @@ public class Jogador extends Entidade {
             System.out.println("Coletou " + fruta.getClass().getSimpleName());
         }
     }
-    public void coletar(Fruta fruta , Floresta flo) {
+
+    /**
+     * Coleta uma fruta e a adiciona à mochila do jogador, interagindo com a floresta.
+     *
+     * @param fruta A fruta a ser coletada.
+     * @param flo   A floresta em que a coleta ocorre.
+     */
+    public void coletar(Fruta fruta, Floresta flo) {
         if (mochila.adicionarFruta(fruta)) {
             fruta.aoColetar(this);
         }
     }
 
-
-
     /**
-     * Empurra outro jogador.
+     * Empurra outro jogador, derrubando frutas da mochila do oponente com base na
+     * força do jogador e do oponente.
      *
      * @param oponente O jogador a ser empurrado.
      */
@@ -106,120 +150,50 @@ public class Jogador extends Entidade {
         }
     }
 
-
-    public int consumirCoco(Mochila mochila , Configuracao config) {
-		// TODO Auto-generated method stub
-        List<Fruta> frutasNaMochila = mochila.getFrutas(); 
-        Fruta coco = null; 
-        for (Fruta fruta : frutasNaMochila) {
-        	if (fruta.getClass().getSimpleName().equals("Coco")) {
-				coco = fruta;
-			}        	
-        }
-        if (coco != null && !coco.isBichada(config)) {
-        	this.mochila.removerFruta(coco);
-        	System.out.println("Coco consumido");
-			 return 0;
-		}else if(coco != null && coco.isBichada(config)) {
-			System.out.println("A fruta está bichada");
-			this.doente = true;
-			return 1;
-		}else {
-			System.out.println("Não há cocos na mochila");
-			return 2;
-		}
-	
-			
-		}
-	
-
-	public int consumirLaranja(Mochila mochila , Configuracao config) {
-		// TODO Auto-generated method stub
-		 List<Fruta> frutasNaMochila = mochila.getFrutas(); 
-	        Fruta laranja = null; 
-	        for (Fruta fruta : frutasNaMochila) {
-	        	if (fruta.getClass().getSimpleName().equals("Laranja")) {
-					laranja = fruta;
-				}        	
-	        }
-	        if (laranja != null && !laranja.isBichada(config)) {
-	        	this.mochila.removerFruta(laranja);
-	        	System.out.println("Laranja consumida");
-	        	this.doente= false;
-	        	System.out.println("Você tomou o antídoto");
-				 return 0;
-			}else if(laranja != null && laranja.isBichada(config)) {
-				System.out.println("A fruta está bichada");
-				this.doente = true;
-				return 1;
-			}else {
-				System.out.println("Não há laranjas na mochila");
-				return 2;
-			}
-	}
-	
-
-	public int consumirAbacate(Mochila mochila , Configuracao config) {
-		// TODO Auto-generated method stub
-		 List<Fruta> frutasNaMochila = mochila.getFrutas(); 
-	        Fruta abacate = null; 
-	        for (Fruta fruta : frutasNaMochila) {
-	        	if (fruta.getClass().getSimpleName().equals("Abacate")) {
-					abacate = fruta;
-				}        	
-	        }
-	        if (abacate != null && !abacate.isBichada(config)) {
-	        	this.mochila.removerFruta(abacate);
-	        	System.out.println("Abacate consumida");
-	        	this.multiplicadorPoder *= 2;
-	        	System.out.println("Você dobrou sua força");
-				 return 0;
-			}else if(abacate != null && abacate.isBichada(config)) {
-				System.out.println("A fruta está bichada");
-				this.doente = true;
-				return 1;
-			}else {
-				System.out.println("Não há abacates na mochila");
-				return 2;
-			}
-	}
-
-	
-    
-    
-
+    /**
+     * Verifica se o jogador está doente.
+     *
+     * @return True se o jogador estiver doente; caso contrário, false.
+     */
     public boolean isDoente() {
-		return doente;
-	}
+        return doente;
+    }
 
-	public void setDoente(boolean doente) {
-		this.doente = doente;
-	}
+    /**
+     * Define o estado de doença do jogador.
+     *
+     * @param doente O estado de doença a ser definido.
+     */
+    public void setDoente(boolean doente) {
+        this.doente = doente;
+    }
 
-	@Override
+    /**
+     * Retorna uma representação em string do jogador, incluindo sua posição,
+     * pontos de vitória e frutas na mochila.
+     *
+     * @return A representação em string do jogador.
+     */
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        // Adiciona a posição do jogador=
+        // Adiciona a posição do jogador
         sb.append("Posição: (").append(getX()).append(", ").append(getY()).append(")\n");
         sb.append("Pontos:").append(getPontosVitoria()).append("\n");
 
         // Adiciona a lista de frutas na mochila
-        List<Fruta> frutasNaMochila = mochila.getFrutas(); // Supondo que exista um método getFrutas() em Mochila
+        List<Fruta> frutasNaMochila = mochila.getFrutas();
         sb.append("Frutas na Mochila:\n");
 
         if (frutasNaMochila.isEmpty()) {
             sb.append("Nenhuma fruta na mochila.\n");
         } else {
             for (Fruta fruta : frutasNaMochila) {
-                sb.append("- ").append(fruta.getClass().getSimpleName()).append("\n"); // Supondo que Fruta tem um método getNome()
+                sb.append("- ").append(fruta.getClass().getSimpleName()).append("\n");
             }
         }
 
-        return sb.toString(); // Retorna a representação em string do jogador
+        return sb.toString();
     }
-
-	
-
-	
 }
