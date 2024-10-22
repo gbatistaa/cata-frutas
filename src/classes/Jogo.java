@@ -103,12 +103,14 @@ public class Jogo extends JPanel {
 
                         // Verifica se a posição contém um dos jogadores
                         if (um.getX() == finalX && um.getY() == finalY) {
-                            g.setColor(um.getColor()); // Usa a cor do jogador um
-                            g.fillOval(0, 0, getWidth(), getHeight()); // Desenha o jogador um
+                            Image jog = Recursos.getInstancia().carregarImagem("assets/jogador1.png");
+                            int width = obterLarguraPorAltura(jog, getHeight());
+                            g.drawImage(jog, (getWidth() - width) / 2, 0, width, getHeight(), this); // Desenha a imagem no painel
                         }
                         if (dois.getX() == finalX && dois.getY() == finalY) {
-                            g.setColor(dois.getColor()); // Usa a cor do jogador dois
-                            g.fillOval(0, 0, getWidth(), getHeight()); // Desenha o jogador dois
+                            Image jog = Recursos.getInstancia().carregarImagem("assets/jogador2.png");
+                            int width = obterLarguraPorAltura(jog, getHeight());
+                            g.drawImage(jog, (getWidth() - width) / 2, 0, width, getHeight(), this); // Desenha a imagem no painel
                         }
                     }
                 };
@@ -175,6 +177,26 @@ public class Jogo extends JPanel {
         Entidade entidade = flo.getEntidade(x, y);
         Recursos recursos = Recursos.getInstancia(); // Obtenha a instância única de Recursos
 
+        if (entidade instanceof Pedra) {
+            return recursos.carregarImagem("assets/pedra.png");
+        } else if (entidade instanceof Arvore) {
+            Arvore arvore = (Arvore) entidade;
+            return recursos.carregarImagem("assets/arvore_" + arvore.getTipo().getClass().getSimpleName().toLowerCase() + ".png");
+        } else if (entidade instanceof Fruta) {
+            Fruta fruta = (Fruta) entidade;
+            return recursos.carregarImagem("assets/fruta_" + fruta.getClass().getSimpleName().toLowerCase() + ".png");
+        }
+
+        return null;
+    }
+    /**
+     * Retorna a imagem da entidade especifica
+     *
+     * @param entidade A entidade
+     * @return A imagem correspondente à entidade, ou null se não houver entidade.
+     */
+    public Image getImagemParaEntidade(Entidade entidade) {
+        Recursos recursos = Recursos.getInstancia(); // Obtenha a instância única de Recursos
         if (entidade instanceof Pedra) {
             return recursos.carregarImagem("assets/pedra.png");
         } else if (entidade instanceof Arvore) {
@@ -314,8 +336,19 @@ public class Jogo extends JPanel {
         List<Fruta> frutas = (turnoJogadorUm ? um : dois).getMochila().getFrutas();
 
         for (Fruta fruta : frutas) {
-            JLabel labelFruta = new JLabel(fruta.getClass().getSimpleName()); // Assume que Fruta tem um método getNome()
+            // Obtenha a imagem da fruta, assumindo que há um método getImagem() em Fruta
+            ImageIcon imagemFruta = new ImageIcon(getImagemParaEntidade(fruta)); // Altere aqui para a forma correta de obter a imagem
+            JLabel labelFruta = new JLabel(imagemFruta); // Use a imagem como o ícone do JLabel
+
+            // Configurações do JLabel
+            labelFruta.setText(fruta.getClass().getSimpleName()); // Define o nome da fruta como texto do JLabel
+            labelFruta.setHorizontalTextPosition(JLabel.RIGHT); // Posiciona o texto à direita do ícone
+            labelFruta.setVerticalTextPosition(JLabel.CENTER); // Centraliza o texto verticalmente em relação ao ícone
             labelFruta.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)); // Cursor de mão ao passar o mouse
+
+            // Aumenta o tamanho da imagem para melhor visibilidade
+            Image imagemRedimensionada = imagemFruta.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+            labelFruta.setIcon(new ImageIcon(imagemRedimensionada)); // Atualiza o ícone com a imagem redimensionada
 
             // Adiciona um MouseListener para consumir a fruta ao clicar
             labelFruta.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -333,6 +366,8 @@ public class Jogo extends JPanel {
         painelInventario.revalidate(); // Atualiza a interface
         painelInventario.repaint(); // Repaint para mostrar as alterações
     }
+
+
 
     /**
      * Cria um {@link KeyListener} para gerenciar a entrada de teclado do jogador.
@@ -378,19 +413,6 @@ public class Jogo extends JPanel {
                         break;
                     case KeyEvent.VK_Q:
                         movimentos = 0;
-                        break;
-                    case KeyEvent.VK_1:
-                        int res = movedor.consumirCoco(movedor.getMochila(), config);
-                        if (res == 0 ) {
-                            movimentos *= 2;
-                            System.out.println("MOVIMENTOS: " + movimentos);
-                        }
-                        break;
-                    case KeyEvent.VK_2:
-                        movedor.consumirAbacate(movedor.getMochila(), config);
-                        break;
-                    case KeyEvent.VK_3:
-                        movedor.consumirLaranja(movedor.getMochila(), config);
                         break;
 
                     default:
@@ -467,6 +489,25 @@ public class Jogo extends JPanel {
                 // Não implementado
             }
         };
+    }
+    /**
+     * Calcula a largura correta de uma imagem com base na altura fornecida,
+     * mantendo a proporção original da imagem.
+     *
+     * @param imagem A imagem da qual se deseja obter a largura.
+     * @param altura A altura desejada para a imagem.
+     * @return A largura calculada com base na altura fornecida.
+     */
+    public int obterLarguraPorAltura(Image imagem, int altura) {
+        // Obtém as dimensões originais da imagem
+        int larguraOriginal = imagem.getWidth(null);
+        int alturaOriginal = imagem.getHeight(null);
+
+        // Calcula a proporção original
+        double proporcao = (double) larguraOriginal / alturaOriginal;
+
+        // Calcula a nova largura com base na altura fornecida
+        return (int) (altura * proporcao);
     }
 
 

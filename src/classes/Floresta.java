@@ -97,6 +97,8 @@ public class Floresta {
     }
 
     private void distribuirArvores(String tipoFruta, int quantidade) {
+        if (Fruta.PorNome(tipoFruta) instanceof Maracuja)
+            return;
         for (int i = 0; i < quantidade; i++) {
             int x = (int) (Math.random() * dimensao);
             int y = (int) (Math.random() * dimensao);
