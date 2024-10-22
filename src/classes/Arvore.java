@@ -13,7 +13,7 @@ public class Arvore extends Entidade{
     }
     public void passarTurno() {turnosDesdeUltimoDrop++;}
     public Fruta TryDropFruta() {
-        if (turnosDesdeUltimoDrop > Recursos.getInstancia().DelayTurnosDropArvore) {
+        if (turnosDesdeUltimoDrop > Recursos.DelayTurnosDropArvore) {
             turnosDesdeUltimoDrop = 0;
             return Fruta.PorNome(tipoFruta.getClass().getSimpleName());
         }

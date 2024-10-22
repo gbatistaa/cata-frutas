@@ -16,6 +16,7 @@ import javax.swing.*;
  * Representa a lógica do jogo, incluindo o gerenciamento dos jogadores e do tabuleiro.
  */
 public class Jogo extends JPanel {
+    private JFrame parent;
     private Jogador um, dois;
     private boolean ativo = false;
     private Configuracao config;
@@ -32,9 +33,10 @@ public class Jogo extends JPanel {
 	/**
      * Construtor do jogo.
      */
-    public Jogo(Floresta floresta, Configuracao config)
+    public Jogo(Floresta floresta, Configuracao config, JFrame parent)
     {
         Inicializar(floresta, config);
+        this.parent = parent;
     }
 
     /**
@@ -250,12 +252,13 @@ public class Jogo extends JPanel {
             System.out.println("VENCEDOR DECLARADO");
             // Exibe um popup informando quem ganhou
             String mensagemVencedor = "O jogador " + vencedorId + " venceu!";
-            int resposta = JOptionPane.showConfirmDialog(this, mensagemVencedor, "Fim de Jogo", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
+            int resposta = JOptionPane.showConfirmDialog(this, mensagemVencedor, "Fim de Jogo", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
 
             // Se o botão "OK" for pressionado, retorna à tela de configuração
             if (resposta == JOptionPane.OK_OPTION) {
                 // Aqui você pode chamar o método que retorna à tela de configuração
                 TelaDeConfig.exibir();
+                parent.dispose();
             }
         }
     }

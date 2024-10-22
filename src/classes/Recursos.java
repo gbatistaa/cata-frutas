@@ -18,7 +18,8 @@ public class Recursos {
 
     private Floresta floresta;
 
-    public final int DelayTurnosDropArvore = 5;
+    public static final int DelayTurnosDropArvore = 5;
+    public static final float AspectRatio = 1100/900;
 
     /**
      * Construtor privado para evitar instâncias fora da classe.

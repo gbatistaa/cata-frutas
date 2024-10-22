@@ -246,7 +246,7 @@ public class TelaDeConfig extends JFrame {
     private void inicializarJogo(Configuracao config)  {
         JFrame frame = new JFrame("Cata-frutas");
         Floresta f = new Floresta();
-        Jogo jogo = new Jogo(f, config);
+        Jogo jogo = new Jogo(f, config, frame);
         f.gerar(config);
         System.out.println("Floresta criada: \n" + f);
         frame.add(jogo);
@@ -255,6 +255,7 @@ public class TelaDeConfig extends JFrame {
         frame.setResizable(false);
         frame.setVisible(true);
         jogo.render(f, config);
+        this.dispose();
     }
 
     public static void exibir() {
